@@ -2,11 +2,10 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Search, X, BookOpen, MessageCircle, Headphones, User, MoreHorizontal, Volume2, VolumeX, Info, Users, Menu, Bookmark, Layers, Bell, FileText, Music } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 
-// Тип для трека
+// ─── Types ───────────────────────────────────────────────────────
 interface Track {
   id: string;
   title: string;
@@ -25,10 +24,9 @@ interface Track {
   };
 }
 
-// Тип станции
 type StationType = 'default' | 'ost';
 
-// Плейлист основной станции
+// ─── Playlists ───────────────────────────────────────────────────
 const defaultPlaylist: Track[] = [
   {
     id: '1',
@@ -43,17 +41,16 @@ const defaultPlaylist: Track[] = [
     },
     isAnimeOpening: false,
     info: {
-      description: `«Elf» qo'shig'i — Ado va vokaloid-prodyuser Mitchie M o'rtasidagi hissiyotlarga boy hamkorlikdir. Trek maxsus «Kujaku no Dance, Dare ga Mita?» («Tovus raqsini kim ko'rdi?») mangasi uchun asosiy mavzu sifatida yozilgan.`,
+      description: `«Elf» qo'shig'i — Ado va vokaloid-prodyuser Mitchie M o'rtasidagi hissiyotlarga boy hamkorlikdir. Trek maxsus «Kujaku no Dance, Dare ga Mita?» mangasi uchun asosiy mavzu sifatida yozilgan.`,
       details: [
-        { title: 'Manga bilan aloqasi:', text: "Ado yozish jarayonida qahramon fojeasini chuqur yetkazib berish uchun o'zini manganing bosh qahramoni Miko o'rnida tasavvur qilganini tan olgan." },
-        { title: "G'ayrioddiy uslub:", text: "Qo'shiq ustida o'zining ijobiy treklari bilan tanilgan Mitchie M ishlagan." },
-        { title: "Nomning ramziy ma'nosi:", text: "«Elf» nomi fenteziga emas, balki nemischa «11» (o'n bir) raqamiga ishora qiladi." }
+        { title: 'Manga bilan aloqasi', text: "Ado yozish jarayonida qahramon fojeasini chuqur yetkazib berish uchun o'zini manganing bosh qahramoni Miko o'rnida tasavvur qilganini tan olgan." },
+        { title: "G'ayrioddiy uslub", text: "Qo'shiq ustida o'zining ijobiy treklari bilan tanilgan Mitchie M ishlagan." },
+        { title: "Nomning ramziy ma'nosi", text: "«Elf» nomi fenteziga emas, balki nemischa «11» (o'n bir) raqamiga ishora qiladi." }
       ]
     }
   }
 ];
 
-// Плейлист OST станции
 const ostPlaylist: Track[] = [
   {
     id: 'ost-1',
@@ -65,938 +62,659 @@ const ostPlaylist: Track[] = [
     lyrics: null,
     isAnimeOpening: false,
     info: {
-      description: `«Pathway» — Kevin Penkin tomonidan yaratilgan ajoyib musiqiy asar. Kevin Penkin — mashhur avstraliyalik bastakor bo'lib, u «Made in Abyss», «Tower of God», «The Rising of the Shield Hero» kabi anime seriallariga yozgan musiqalari bilan tanilgan. Uning musiqasi chuqur hissiyotlar, epik orkestr aranjirovkalari va unutilmas melodiyalari bilan ajralib turadi.`,
+      description: `«Pathway» — Kevin Penkin tomonidan yaratilgan ajoyib musiqiy asar. Kevin Penkin — mashhur avstraliyalik bastakor bo'lib, u «Made in Abyss», «Tower of God», «The Rising of the Shield Hero» kabi anime seriallariga yozgan musiqalari bilan tanilgan.`,
       details: [
-        { title: 'Bastakor haqida:', text: 'Kevin Penkin — avstraliyalik bastakor, anime industriyasidagi eng yorqin iste\'dodlardan biri. U «Made in Abyss» uchun yozgan saundtreki bilan xalqaro e\'tirofga sazovor bo\'lgan.' },
-        { title: 'Musiqiy uslub:', text: 'Penkin musiqasi orkestr, xor va elektron elementlarning noyob uyg\'unligi bilan ajralib turadi. Uning kompozitsiyalari tinglovchini chuqur hissiy sayohatga yetaklaydi.' },
-        { title: 'Mashhur ishlari:', text: '«Made in Abyss», «Tower of God», «The Rising of the Shield Hero», «Eden», «Star Wars: Visions» kabi loyihalar uchun yozilgan musiqalar.' }
+        { title: 'Bastakor haqida', text: 'Kevin Penkin — avstraliyalik bastakor, anime industriyasidagi eng yorqin iste\'dodlardan biri.' },
+        { title: 'Musiqiy uslub', text: 'Penkin musiqasi orkestr, xor va elektron elementlarning noyob uyg\'unligi bilan ajralib turadi.' },
+        { title: 'Mashhur ishlari', text: '«Made in Abyss», «Tower of God», «The Rising of the Shield Hero», «Eden», «Star Wars: Visions».' }
       ]
     }
   }
 ];
 
-// Очередь для основной станции
 const defaultUpcomingTracks = [
-  "Ado - Rockstar",
-  "9lana - プロポーズ",
-  "DECO*27 - モニтаリング",
-  "KIRA - CRASH THE PARTY",
-  "Vaundy - Odoriko",
-  "YOASOBI - Idol",
-  "Eve - Kaikai Kitan",
-  "Hatsune Miku - Senbonzakura",
-  "Kenshi Yonezu - Kick Back",
-  "LiSA - Gurenge"
+  "Ado — Rockstar",
+  "9lana — プロポーズ",
+  "DECO*27 — モニタリング",
+  "KIRA — CRASH THE PARTY",
+  "Vaundy — Odoriko",
+  "YOASOBI — Idol",
+  "Eve — Kaikai Kitan",
+  "Hatsune Miku — Senbonzakura",
+  "Kenshi Yonezu — Kick Back",
+  "LiSA — Gurenge"
 ];
 
-// Очередь для OST станции
 const ostUpcomingTracks = [
-  "Kevin Penkin - Tomorrow (Made in Abyss)",
-  "Kevin Penkin - Underground River (Made in Abyss)",
-  "Hiroyuki Sawano - YouSeeBIGGIRL/T:T (Attack on Titan)",
-  "Hiroyuki Sawano - Vogel im Käfig (Attack on Titan)",
-  "Hiroyuki Sawano - The Reluctant Heroes (Attack on Titan)",
-  "Hiroyuki Sawano - Call of Silence (Attack on Titan)",
-  "Yuki Kajiura - Swordland (Sword Art Online)",
-  "Yoko Kanno - Tank! (Cowboy Bebop)",
-  "Yoko Kanno - The Real Folk Blues (Cowboy Bebop)",
-  "Taku Iwasaki - Rhapsody (Gurren Lagann)",
-  "Shiro Sagisu - Treachery (Bleach)",
-  "Shiro Sagisu - Stand Up Be Strong (Bleach)",
-  "Yuki Hayashi - You Say Run (My Hero Academia)",
-  "Yuki Hayashi - Jet Set Run (My Hero Academia)",
-  "Yutaka Yamada - Glassy Sky (Tokyo Ghoul)"
+  "Kevin Penkin — Tomorrow",
+  "Kevin Penkin — Underground River",
+  "Hiroyuki Sawano — YouSeeBIGGIRL/T:T",
+  "Hiroyuki Sawano — Vogel im Käfig",
+  "Hiroyuki Sawano — The Reluctant Heroes",
+  "Hiroyuki Sawano — Call of Silence",
+  "Yuki Kajiura — Swordland",
+  "Yoko Kanno — Tank!",
+  "Yoko Kanno — The Real Folk Blues",
+  "Taku Iwasaki — Rhapsody"
 ];
 
-// Парсинг таймингов
-const parseTimestamp = (timestamp: string): number => {
-  const match = timestamp.match(/\[(\d{2}):(\d{2})\.(\d{2})\]/);
-  if (match) {
-    const minutes = parseInt(match[1]);
-    const seconds = parseInt(match[2]);
-    const centiseconds = parseInt(match[3]);
-    return minutes * 60 + seconds + centiseconds / 100;
-  }
-  return 0;
+// ─── Lyrics Helpers ──────────────────────────────────────────────
+const parseTimestamp = (ts: string): number => {
+  const m = ts.match(/\[(\d{2}):(\d{2})\.(\d{2})\]/);
+  if (!m) return 0;
+  return parseInt(m[1]) * 60 + parseInt(m[2]) + parseInt(m[3]) / 100;
 };
 
-// Получение таймкодов
-const getTimestampsFromLyrics = (lyricsText: string): { time: number; line: string }[] => {
-  const lines = lyricsText.split('\n');
-  const timestamps: { time: number; line: string }[] = [];
-  
-  lines.forEach(line => {
-    const timestampMatch = line.match(/\[(\d{2}:\d{2}\.\d{2})\]/);
-    if (timestampMatch) {
-      const time = parseTimestamp(timestampMatch[0]);
-      const cleanLine = line.replace(/\[\d{2}:\d{2}\.\d{2}\]/, '').trim();
-      if (cleanLine) {
-        timestamps.push({ time, line: cleanLine });
-      }
+const parseLyrics = (text: string): { time: number; line: string }[] => {
+  return text.split('\n').reduce<{ time: number; line: string }[]>((acc, line) => {
+    const m = line.match(/\[(\d{2}:\d{2}\.\d{2})\]/);
+    if (m) {
+      const clean = line.replace(/\[\d{2}:\d{2}\.\d{2}\]/, '').trim();
+      if (clean) acc.push({ time: parseTimestamp(m[0]), line: clean });
     }
-  });
-  
-  return timestamps;
+    return acc;
+  }, []);
 };
 
-// Lyrics Component
-const LyricsDisplay = ({ lyrics, currentTime, trackName, artistName }: { lyrics: Track['lyrics']; currentTime: number; trackName: string; artistName: string }) => {
-  const [activeLang, setActiveLang] = useState<'uzbek' | 'romaji'>('uzbek');
-  const languages = [
-    { key: 'uzbek', label: 'UZ' },
-    { key: 'romaji', label: 'RO' },
-  ];
-
-  const timestamps = lyrics ? getTimestampsFromLyrics(lyrics[activeLang]) : [];
+// ─── Lyrics Component ────────────────────────────────────────────
+function LyricsPanel({ lyrics, currentTime }: { lyrics: Track['lyrics']; currentTime: number }) {
+  const [lang, setLang] = useState<'uzbek' | 'romaji'>('uzbek');
   const scrollRef = useRef<HTMLDivElement>(null);
-  
-  const getActiveLineIndex = () => {
-    if (!lyrics) return -1;
-    let activeIndex = -1;
-    for (let i = 0; i < timestamps.length; i++) {
-      if (currentTime >= timestamps[i].time) {
-        activeIndex = i;
-      } else {
-        break;
-      }
-    }
-    return activeIndex;
-  };
 
-  const activeLineIndex = getActiveLineIndex();
+  const timestamps = lyrics ? parseLyrics(lyrics[lang]) : [];
+
+  const activeIdx = (() => {
+    let idx = -1;
+    for (let i = 0; i < timestamps.length; i++) {
+      if (currentTime >= timestamps[i].time) idx = i;
+      else break;
+    }
+    return idx;
+  })();
 
   useEffect(() => {
-    if (scrollRef.current && activeLineIndex >= 0) {
-      const container = scrollRef.current;
-      const activeElement = container.children[activeLineIndex] as HTMLElement;
-      
-      if (activeElement) {
-        const containerHeight = container.clientHeight;
-        const elementOffset = activeElement.offsetTop;
-        const elementHeight = activeElement.clientHeight;
-        
-        container.scrollTo({
-          top: elementOffset - (containerHeight / 2) + (elementHeight / 2),
+    if (scrollRef.current && activeIdx >= 0) {
+      const el = scrollRef.current.children[activeIdx] as HTMLElement;
+      if (el) {
+        scrollRef.current.scrollTo({
+          top: el.offsetTop - scrollRef.current.clientHeight / 2 + el.clientHeight / 2,
           behavior: 'smooth'
         });
       }
     }
-  }, [activeLineIndex]);
+  }, [activeIdx]);
 
-  if (!lyrics) {
-    return null;
-  }
+  if (!lyrics) return null;
 
   return (
-    <div className="flex flex-col h-full overflow-hidden w-full relative z-10 select-none">
-      <div className="flex items-center justify-between mb-4 md:mb-6 flex-shrink-0 px-2 select-none">
-        <div className="overflow-hidden mr-2">
-          <h3 className="text-lg md:text-xl font-bold text-white tracking-tight truncate">"{trackName}"</h3>
-          <p className="text-xs text-gray-400 mt-1 truncate font-medium">Musiqachi: {artistName}</p>
-        </div>
-        
-        <div className="flex flex-shrink-0 bg-white/5 p-1 rounded-xl backdrop-blur-md border border-white/10">
-          {languages.map((lang) => (
-            <button
-              key={lang.key}
-              onClick={() => setActiveLang(lang.key as 'uzbek' | 'romaji')}
-              className={`px-2.5 md:px-3 py-1 md:py-1.5 rounded-lg text-[11px] md:text-xs font-bold transition-all ${
-                activeLang === lang.key
-                  ? 'bg-[#8a60c2] text-white shadow-md'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              {lang.label}
-            </button>
-          ))}
-        </div>
+    <div className="flex flex-col h-full">
+      {/* Lang toggle */}
+      <div className="flex items-center gap-1 mb-6 flex-shrink-0">
+        {(['uzbek', 'romaji'] as const).map((l) => (
+          <button
+            key={l}
+            onClick={() => setLang(l)}
+            className="px-3 py-1 text-[10px] uppercase tracking-[0.15em] font-medium transition-all duration-300 cursor-pointer"
+            style={{
+              color: lang === l ? 'var(--accent)' : 'var(--text-muted)',
+              borderBottom: lang === l ? '1px solid var(--accent)' : '1px solid transparent'
+            }}
+          >
+            {l === 'uzbek' ? "O'zbekcha" : 'Romaji'}
+          </button>
+        ))}
       </div>
-      
-      <div 
+
+      {/* Lyrics scroll */}
+      <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto custom-scrollbar space-y-3 md:space-y-4 text-center pr-2 pb-4 w-full"
-        style={{ 
-          maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent)'
+        className="flex-1 overflow-y-auto pr-2 space-y-4"
+        style={{
+          maskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%)'
         }}
       >
-        {timestamps.map((item, idx) => {
-          const isActive = idx === activeLineIndex;
-          const isNear = Math.abs(idx - activeLineIndex) <= 2;
-          
-          return (
-            <div key={idx} className="flex justify-center w-full">
-              <p 
-                className={`transition-all duration-300 inline-block px-3 md:px-4 py-1.5 md:py-2 rounded-xl text-sm md:text-base ${
-                  isActive 
-                    ? 'bg-[#8a60c2]/20 text-white font-semibold md:text-lg shadow-[0_0_15px_rgba(138,96,194,0.25)]' 
-                    : isNear
-                      ? 'text-white/70 opacity-80'
-                      : 'text-white/30 opacity-30'
-                }`}
-              >
-                {item.line}
-              </p>
-            </div>
-          );
-        })}
+        {timestamps.map((item, idx) => (
+          <p
+            key={idx}
+            className="transition-all duration-500 text-[15px] leading-relaxed cursor-default"
+            style={{
+              color: idx === activeIdx
+                ? 'var(--text-primary)'
+                : Math.abs(idx - activeIdx) <= 2
+                  ? 'var(--text-secondary)'
+                  : 'var(--text-muted)',
+              fontWeight: idx === activeIdx ? 500 : 400,
+              transform: idx === activeIdx ? 'translateX(4px)' : 'translateX(0)',
+            }}
+          >
+            {item.line}
+          </p>
+        ))}
       </div>
     </div>
   );
-};
+}
 
+// ─── Main Page ───────────────────────────────────────────────────
 export default function RadioPage() {
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentProgress, setCurrentProgress] = useState(0);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Вкладки на десктопе в правой панели: 'lyrics' (Маtn) или 'details' (Musiqa haqida)
-  const [activeRightTab, setActiveRightTab] = useState<'lyrics' | 'details'>('lyrics');
-
-  // Для мобильного скролл-вида: переключение между текстом, очередью или описанием
-  const [mobileTab, setMobileTab] = useState<'queue' | 'lyrics' | 'details'>('queue');
-
-  const [activeStation, setActiveStation] = useState<StationType>('default');
-  const [isOstActivating, setIsOstActivating] = useState(false);
-  
-  const [transitionInfo, setTransitionInfo] = useState({
-    image: '/images/ostchan.webp',
-    title: '"OST"'
-  });
-  
-  const [defaultQueue, setDefaultQueue] = useState(defaultUpcomingTracks);
-  const [ostQueue, setOstQueue] = useState(ostUpcomingTracks);
-  
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
-  const [listenersCount, setListenersCount] = useState(342);
+  const [activeStation, setActiveStation] = useState<StationType>('default');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showQueue, setShowQueue] = useState(false);
+  const [activePanel, setActivePanel] = useState<'lyrics' | 'info'>('lyrics');
+  const [listeners, setListeners] = useState(342);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const volumeLineRef = useRef<HTMLDivElement | null>(null);
-  const prevStationRef = useRef<StationType>('default');
-  const [isMobile, setIsMobile] = useState(false);
+  const prevStation = useRef<StationType>('default');
 
-  // Закрепленный фиолетовый цвет темы аметиста
-  const themeColor = '#8a60c2';
+  const playlist = activeStation === 'default' ? defaultPlaylist : ostPlaylist;
+  const queue = activeStation === 'default' ? defaultUpcomingTracks : ostUpcomingTracks;
 
+  // Listener count simulation
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const iv = setInterval(() => setListeners(p => p + Math.floor(Math.random() * 5) - 2), 5000);
+    return () => clearInterval(iv);
   }, []);
 
-  const currentPlaylist = activeStation === 'default' ? defaultPlaylist : ostPlaylist;
-  const currentQueue = activeStation === 'default' ? defaultQueue : ostQueue;
-
+  // Init track
   useEffect(() => {
-    const interval = setInterval(() => {
-      setListenersCount(prev => prev + Math.floor(Math.random() * 5) - 2);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (currentPlaylist[0] && !selectedTrack) {
-      setSelectedTrack(currentPlaylist[0]);
-      return;
+    if (!selectedTrack && playlist[0]) {
+      setSelectedTrack(playlist[0]);
     }
+  }, [playlist, selectedTrack]);
 
-    if (prevStationRef.current !== activeStation && currentPlaylist[0]) {
-      setSelectedTrack(currentPlaylist[0]);
+  // Station change
+  useEffect(() => {
+    if (prevStation.current !== activeStation && playlist[0]) {
+      setSelectedTrack(playlist[0]);
       setIsPlaying(false);
-      setCurrentProgress(0);
-      if (!currentPlaylist[0].lyrics) {
-        setActiveRightTab('details');
-        setMobileTab('details');
-      } else {
-        setActiveRightTab('lyrics');
-        setMobileTab('lyrics');
-      }
+      setProgress(0);
+      if (!playlist[0].lyrics) setActivePanel('info');
+      else setActivePanel('lyrics');
     }
+    prevStation.current = activeStation;
+  }, [activeStation, playlist]);
 
+  // Audio source
+  useEffect(() => {
     if (selectedTrack && audioRef.current) {
       const audio = audioRef.current;
       const wasPlaying = isPlaying;
       audio.src = selectedTrack.audioSrc;
       audio.load();
-      
       if (wasPlaying) {
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(err => {
-            if (err.name !== 'AbortError') {
-              console.error('Auto-play blocked:', err);
-              setIsPlaying(false);
-            }
-          });
-        }
+        audio.play().catch(e => {
+          if (e.name !== 'AbortError') setIsPlaying(false);
+        });
       }
     }
-    
-    prevStationRef.current = activeStation;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTrack, activeStation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTrack]);
 
+  // Audio events
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    const updateProgress = () => setCurrentProgress(audio.currentTime);
-    const handleError = (e: ErrorEvent) => console.error('Audio error:', e);
-    const handleEnded = () => {
-      setIsPlaying(false);
-      setCurrentProgress(0);
-    };
-    
-    audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('error', handleError as any);
-    audio.addEventListener('ended', handleEnded);
-    
+    const onTime = () => setProgress(audio.currentTime);
+    const onMeta = () => setDuration(audio.duration || 0);
+    const onEnd = () => { setIsPlaying(false); setProgress(0); };
+    audio.addEventListener('timeupdate', onTime);
+    audio.addEventListener('loadedmetadata', onMeta);
+    audio.addEventListener('ended', onEnd);
     return () => {
-      audio.removeEventListener('timeupdate', updateProgress);
-      audio.removeEventListener('error', handleError as any);
-      audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('timeupdate', onTime);
+      audio.removeEventListener('loadedmetadata', onMeta);
+      audio.removeEventListener('ended', onEnd);
     };
   }, []);
 
+  // Volume
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : volume;
-    }
+    if (audioRef.current) audioRef.current.volume = isMuted ? 0 : volume;
   }, [volume, isMuted]);
 
-  const togglePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            if (error.name !== 'AbortError') {
-              console.error('Playback error:', error);
-              setIsPlaying(false);
-            }
-          });
-        }
-        setIsPlaying(true);
-      }
+  const togglePlay = useCallback(() => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch(e => {
+        if (e.name !== 'AbortError') setIsPlaying(false);
+      });
+      setIsPlaying(true);
     }
-  };
+  }, [isPlaying]);
 
-  const toggleStation = () => {
-    if (isOstActivating) return;
-
-    const nextStation = activeStation === 'default' ? 'ost' : 'default';
-    const transitionImage = nextStation === 'ost' ? '/images/ostchan.webp' : '/images/jpopchan.webp';
-
-    setTransitionInfo({
-      image: transitionImage,
-      title: nextStation === 'ost' ? '"OST"' : '"J-Pop / J-Rock"'
-    });
-
-    setIsOstActivating(true);
-    
+  const toggleStation = useCallback(() => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setTimeout(() => {
-      setActiveStation(nextStation);
-    }, 1200);
+      setActiveStation(s => s === 'default' ? 'ost' : 'default');
+    }, 600);
+    setTimeout(() => setIsTransitioning(false), 2000);
+  }, [isTransitioning]);
 
-    setTimeout(() => {
-      setIsOstActivating(false);
-    }, 3000);
+  const formatTime = (t: number) => {
+    if (!t || isNaN(t)) return '0:00';
+    const m = Math.floor(t / 60);
+    const s = Math.floor(t % 60);
+    return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Регулятор громкости по клику
-  const handleVolumeClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!volumeLineRef.current) return;
-    const rect = volumeLineRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const percent = Math.max(0, Math.min(1, clickX / rect.width));
-    const finalVol = parseFloat(percent.toFixed(2));
-    setVolume(finalVol);
-    setIsMuted(finalVol === 0);
-  };
+  const progressPercent = duration > 0 ? (progress / duration) * 100 : 0;
+  const isDefault = activeStation === 'default';
 
-  // Плавная регулировка колесиком мыши
-  const handleVolumeWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const diff = e.deltaY < 0 ? 0.05 : -0.05;
-    const newVol = Math.max(0, Math.min(1, volume + diff));
-    const finalVol = parseFloat(newVol.toFixed(2));
-    setVolume(finalVol);
-    setIsMuted(finalVol === 0);
-  };
-
-  // 3D-наклон карточки обложки
-  const handleCoverMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const normX = x / (rect.width / 2);
-    const normY = y / (rect.height / 2);
-    const tiltX = normX * 8; 
-    const tiltY = -normY * 8;
-    card.style.transform = `perspective(1200px) rotateX(${tiltY}deg) rotateY(${tiltX}deg) scale(1.025)`;
-    
-    // Блик на стекле
-    const gloss = card.querySelector('.glass-gloss') as HTMLElement;
-    if (gloss) {
-      gloss.style.background = `radial-gradient(circle at ${(normX + 1) * 50}% ${(normY + 1) * 50}%, rgba(255, 255, 255, 0.22) 0%, transparent 60%)`;
-    }
-  };
-
-  const handleCoverMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    card.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1)`;
-    
-    const gloss = card.querySelector('.glass-gloss') as HTMLElement;
-    if (gloss) {
-      gloss.style.background = `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%)`;
-    }
-  };
-
-  const displayTracks = selectedTrack 
-    ? [`${selectedTrack.artist} - ${selectedTrack.title}`, ...currentQueue.slice(0, 9)] 
-    : currentQueue.slice(0, 10);
-
-  const currentTrackInfo = selectedTrack?.info;
-  const isDefaultStation = activeStation === 'default';
-  
-  const stationLabel = isDefaultStation ? 'STATION' : 'STATION';
-  const stationHoverLabels = isDefaultStation ? ['O','S','T'] : ['J','-','P','O','P'];
-  const stationHoverSubLabels = isDefaultStation ? ['S','T','A','T','I','O','N'] : ['J','-','R','O','C','K'];
+  // ─── Waveform bars ─────────────────────────────────────────────
+  const WaveformBars = () => (
+    <div className="flex items-end gap-[2px] h-4">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          className="w-[2px] rounded-full transition-all duration-300"
+          style={{
+            height: isPlaying ? `${8 + Math.random() * 10}px` : '3px',
+            backgroundColor: 'var(--accent)',
+            animation: isPlaying ? `wave-bar ${0.6 + i * 0.15}s ease-in-out infinite alternate` : 'none',
+            animationDelay: `${i * 0.1}s`
+          }}
+        />
+      ))}
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-[#020105] relative overflow-hidden flex flex-col justify-between select-none text-white font-sans">
-      
-      {/* 1. ШИКАРНЫЙ ЖИДКИЙ ШЕЛКОВЫЙ ФОН (Dynamic Liquid Silk Mesh Gradient) */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#020105]">
-        <div className="absolute top-[-30%] left-[-20%] w-[120%] h-[120%] bg-gradient-to-tr from-[#3b1d60] via-[#8a60c2]/30 to-[#120824] opacity-80 blur-[80px]" />
-        
-        {/* Анимированные жидкие сферы */}
-        <div className="absolute top-[10%] left-[10%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#8a60c2]/35 via-[#b388eb]/25 to-transparent blur-[120px] animate-liquid-silk-1 pointer-events-none" />
-        <div className="absolute bottom-[10%] right-[10%] w-[700px] h-[700px] rounded-full bg-gradient-to-bl from-[#4a2f8a]/40 via-[#8a60c2]/20 to-transparent blur-[140px] animate-liquid-silk-2 pointer-events-none" />
+    <div className="min-h-screen bg-[var(--surface)] text-[var(--text-primary)] relative select-none film-grain">
+
+      {/* ── Ambient background ── */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-[var(--accent)] opacity-[0.04] blur-[150px] ambient-orb-1" />
+        <div className="absolute bottom-[-15%] left-[-10%] w-[500px] h-[500px] rounded-full bg-purple-900 opacity-[0.06] blur-[120px] ambient-orb-2" />
       </div>
 
-      {/* 2. НАСТОЯЩИЙ НАВИГАЦИОННЫЙ ХЕДЕР ИЗ ВАШЕГО ПОРТАЛА (Frosted Original TopBar) */}
-      <header className="sticky top-0 h-16 w-full border-b border-white/10 bg-[#000000]/40 backdrop-blur-2xl z-[999] select-none">
-        <div className="flex items-center justify-between w-full max-w-[1150px] mx-auto h-full px-6">
-          <button className="flex cursor-pointer transition-transform duration-200 active:scale-95">
-            <span className="font-extrabold text-4xl text-white tracking-tight">
-              Kawa<span style={{ color: themeColor }}>ii</span>
-            </span>
-          </button>
-          
-          <div className="hidden lg:flex items-center justify-center text-white h-full gap-7">
-            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/70 hover:text-white">
-              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="m21.78 20.72-4.34-4.34a8.702 8.702 0 0 0 2.06-5.63C19.5 5.925 15.575 2 10.75 2S2 5.925 2 10.75s3.925 8.75 8.75 8.75a8.702 8.702 0 0 0 5.63-2.06l4.34 4.34 1.06-1.06ZM3.5 10.75c0-4 3.25-7.25 7.25-7.25S18 6.75 18 10.75 14.75 18 10.75 18 3.5 14.75 3.5 10.75Z" />
-              </svg>
-            </button>
-            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/70 hover:text-white">
-              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6.75 3.5c-.69 0-1.25.56-1.25 1.25V16.8c.375-.192.8-.3 1.25-.3H18.5v-13H6.75ZM18.5 18H6.75a1.25 1.25 0 1 0 0 2.5H18.5V18ZM4 19.25V4.75A2.75 2.75 0 0 1 6.75 2H20v20H6.75A2.75 2.75 0 0 1 4 19.25Z" />
-              </svg>
-              <span className="font-bold text-sm ml-1.5 font-sans tracking-wide uppercase">Katalog</span>
-            </button>
-            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/70 hover:text-white">
-              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6.77 21.7c.155.065.32.095.48.095l.005-.005c.32 0 .64-.125.88-.365L11.56 18h7.69A2.755 2.755 0 0 0 22 15.25v-9.5A2.755 2.755 0 0 0 19.25 3H4.75A2.755 2.755 0 0 0 2 5.75v9.5A2.755 2.755 0 0 0 4.75 18H6v2.545c0 .51.3.96.77 1.155ZM3.5 5.75c0-.69.56-1.25 1.25-1.25h14.5c.69 0 1.25.56 1.25 1.25v9.5c0 .69-.56 1.25-1.25 1.25h-8.31L7.5 19.94V16.5H4.75c-.69 0-1.25-.56-1.25-1.25v-9.5ZM17.5 8h-11v1.5h11V8Zm-4 3.5h-7V13h7v-1.5Z" />
-              </svg>
-              <span className="font-bold text-sm ml-1.5 font-sans tracking-wide uppercase">Forumlar</span>
-            </button>
-            <button className="flex items-center justify-center h-8 py-1 px-4 gap-1.5 rounded-full font-bold text-xs tracking-widest uppercase transition-all duration-200 cursor-pointer border" style={{ color: themeColor, borderColor: `${themeColor}40`, backgroundColor: `${themeColor}12` }}>
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="m20.15 21.09-2.73-.35a2.752 2.752 0 0 1-2.375-3.08l.385-2.975a2.737 2.737 0 0 1 1.045-1.825 2.72 2.72 0 0 1 2.03-.55l1.24.16.02-.145c.285-2.23-.4-4.48-1.885-6.165a7.816 7.816 0 0 0-5.875-2.655c-2.25 0-4.39.97-5.875 2.655a7.815 7.815 0 0 0-1.885 6.165l.02.145 1.24-.16c.73-.095 1.45.1 2.03.55.58.45.955 1.1 1.045 1.825l.38 2.975a2.755 2.755 0 0 1-2.375 3.08l-2.73.35-1.1-8.575a9.34 9.34 0 0 1 2.25-7.35A9.34 9.34 0 0 1 12.01 2c2.68 0 5.23 1.155 7.005 3.165a9.334 9.334 0 0 1 2.25 7.35l-1.1 8.575h-.015Zm-1.995-7.305c-.275 0-.54.09-.76.26-.265.205-.435.5-.475.83l-.385 2.975a1.253 1.253 0 0 0 1.08 1.4l1.24.16.7-5.455-1.24-.16a1.83 1.83 0 0 0-.16-.01Zm-13.705.17.7 5.455 1.24-.16a1.25 1.25 0 0 0 1.08-1.4l-.385-2.975a1.252 1.252 0 0 0-1.4-1.08l-1.24.16h.005Z" />
-              </svg>
-              <span className="font-bold tracking-widest font-sans">Radio</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button className="flex items-center justify-center h-8 w-8 rounded-full transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white" title="Smena temi">
-              <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 22C6.485 22 2 17.515 2 12c0-5.02 3.755-9.28 8.735-9.91l1.11-.14-.29 1.08c-.2.75-.305 1.495-.305 2.225 0 4.685 3.815 8.5 8.5 8.5a8.78 8.78 0 0 0 1.075-.075l1.11-.14-.29 1.08A10.01 10.01 0 0 1 12 22.005V22ZM9.865 3.78C6.17 4.735 3.5 8.1 3.5 12c0 4.685 3.815 8.5 8.5 8.5 3.46 0 6.55-2.11 7.845-5.25h-.095c-5.515 0-10-4.485-10-10 0-.485.04-.975.115-1.47Z" />
-              </svg>
-            </button>
-            <button className="flex shrink-0 h-9 w-9 rounded-sm border border-white/10 bg-white/5 transform-gpu cursor-pointer transition-transform duration-200 active:scale-95 overflow-hidden">
-              <img className="object-cover w-full h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSlk0JfikQBJpYrg_nlYLZUcjDOcEaanRtykudQ9_X1slNjDwOINg9RYk&s=10" alt="Profile" />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Мобильное меню */}
-      <div className={`fixed inset-0 bg-[#000000]/95 backdrop-blur-xl z-[999] transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden flex flex-col pt-24 px-6 gap-6`}>
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-black uppercase tracking-widest" style={{ color: themeColor }}>Menyu</h2>
-          <button onClick={() => setIsMobileMenuOpen(false)} className="text-gray-400 hover:text-white transition">
-            <X size={28} />
-          </button>
-        </div>
-        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition font-sans">Asosiy</a>
-        <a href="#" className="text-2xl font-black uppercase tracking-widest transition font-sans" style={{ color: themeColor }}>Katalog</a>
-        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition font-sans">Forumlar</a>
-        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition font-sans">Radio</a>
-      </div>
-
-      {/* 3. ГЛАВНАЯ СЦЕНА (DOUBLED FROSTED ACRYLIC PANELS - LOCKED HEIGHT AT 580PX) */}
-      <main className="flex-1 flex items-center justify-center py-6 md:py-8 z-10 px-4 md:px-6">
-        <div className="w-full max-w-[1150px] grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch justify-center relative">
-          
-          {/* ЭФФЕКТ ЗАПОЛНЕНИЯ (СТАНЦИЯ) - ДЕСКТОП (перекрывает всё во время перехода) */}
-          <div 
-            className="hidden md:flex absolute top-0 bottom-0 left-0 right-0 z-[100] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] pointer-events-none items-center justify-center overflow-hidden rounded-[2.5rem] shadow-[0_0_50px_rgba(0,0,0,0.5)]"
-            style={{
-              clipPath: isOstActivating ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)',
-              opacity: isOstActivating ? 1 : 0,
-              backgroundColor: themeColor
-            }}
-          >
-            <div className="absolute inset-0 z-0 flex items-center justify-center bg-black/60" style={{ backgroundColor: themeColor }}>
-              <div className={`relative h-full w-full ${transitionInfo.image.includes('ostchan') ? 'md:w-[50%] md:ml-20' : 'md:w-[100%]'}`}>
-                <Image
-                  src={transitionInfo.image}
-                  alt="Station Channel"
-                  fill
-                  className={`transition-transform duration-1000 ${isOstActivating ? 'scale-100' : 'scale-110'} ${
-                    transitionInfo.image.includes('ostchan') ? 'object-cover object-[50%_20%]' : 'object-cover object-center'
-                  }`}
-                  priority
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#8a60c2]/90 via-[#8a60c2]/70 to-[#b388eb]/90" />
-            </div>
-            
-            <div className={`relative z-10 transition-all duration-500 delay-200 text-center ${isOstActivating ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-2 italic drop-shadow-lg">{transitionInfo.title}</h2>
-              <p className="text-white/90 font-mono tracking-widest text-xs md:text-sm uppercase drop-shadow-md">tizimi faollashtirildi</p>
-              <div className="mt-4 w-24 h-1 bg-white/30 mx-auto rounded-full overflow-hidden">
+      {/* ── Station Transition Overlay ── */}
+      {isTransitioning && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center station-wipe-in" style={{ backgroundColor: '#0a0a0a' }}>
+          <div className="relative w-full h-full flex items-center justify-center">
+            <Image
+              src={!isDefault ? '/images/jpopchan.webp' : '/images/ostchan.webp'}
+              alt="Station"
+              fill
+              className="object-cover opacity-20"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+            <div className="relative z-10 text-center fade-up">
+              <p className="label-mono mb-3 text-[var(--accent)]">tizimi faollashtirildi</p>
+              <h2 className="display-title text-5xl md:text-7xl text-white">
+                {!isDefault ? 'J-Pop' : 'OST'}
+              </h2>
+              <div className="mt-6 w-16 h-[1px] bg-[var(--accent)] mx-auto overflow-hidden">
                 <div className="h-full bg-white animate-loading-bar" />
               </div>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* ================= ЛЕВАЯ КОЛОНКА: DYNAMIC 3D DECK & FLUID JOG JAD (5 COLS - h-[580px]) ================= */}
-          <div className="lg:col-span-5 flex flex-col gap-6 lg:h-[580px] justify-between">
-            
-            {/* Карточка 3D Обложки и визуализатора (Premium Glass Panel) */}
-            <div className="glass-panel glass-border-glow rounded-[2.5rem] p-5 flex-1 flex flex-col justify-between overflow-hidden relative group/cover select-none">
-              
-              {/* Верхняя панель со станцией */}
-              <div className="flex items-center justify-between z-10 flex-shrink-0 w-full mb-3 px-1.5">
-                <span className="text-[10px] font-black tracking-widest text-white/50 uppercase font-mono">KAWAII DECK LIVE</span>
-                <button 
-                  onClick={toggleStation}
-                  className="px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-[9px] font-black tracking-widest uppercase hover:bg-white/10 active:scale-95 transition-all text-white/60 hover:text-white flex-shrink-0 cursor-pointer"
-                >
-                  {activeStation === 'default' ? 'J-POP' : 'OST'}
-                </button>
-              </div>
+      {/* ══════════════════════════════════════════════════════════
+           MAIN LAYOUT
+         ══════════════════════════════════════════════════════════ */}
+      <div className="relative z-10 min-h-screen flex flex-col">
 
-              {/* 3D Интерактивная Обложка в Perspective Container */}
-              <div className="perspective-container flex-1 flex items-center justify-center py-2 relative z-10">
-                <div 
-                  onMouseMove={handleCoverMouseMove}
-                  onMouseLeave={handleCoverMouseLeave}
-                  className="tilt-element relative w-[220px] h-[220px] xs:w-[260px] xs:h-[260px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/15 cursor-pointer bg-[#0e0c12]"
-                >
-                  <Image
-                    src={selectedTrack?.coverArt || '/images/ado-elf.jpg'}
-                    alt="Track Album Art"
-                    fill
-                    className="object-cover pointer-events-none"
-                    priority
-                  />
-                  
-                  {/* Реалистичный стеклянный блик */}
-                  <div 
-                    className="glass-gloss absolute inset-0 pointer-events-none transition-all duration-300 z-20"
-                    style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 50%)' }}
-                  />
+        {/* ── Top Bar ── */}
+        <header className="w-full px-6 md:px-10 py-5 flex items-center justify-between flex-shrink-0">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <span className="display-title text-2xl md:text-3xl tracking-tight text-white">
+              Kawa<span style={{ color: 'var(--accent)' }}>ii</span>
+            </span>
+            <span className="label-mono hidden sm:inline-block mt-1">radio</span>
+          </div>
 
-                  {/* Оверлей Play/Pause по центру при ховере */}
-                  <div 
-                    onClick={togglePlayPause}
-                    className="absolute inset-0 bg-black/40 opacity-0 group-hover/cover:opacity-100 transition-all duration-300 flex items-center justify-center z-30 cursor-pointer"
-                  >
-                    <div className="w-14 h-14 bg-white/10 rounded-full border border-white/20 backdrop-blur-md flex items-center justify-center scale-90 group-hover/cover:scale-100 transition-all duration-300 shadow-2xl active:scale-95">
-                      {isPlaying ? (
-                        <Pause className="w-6 h-6 text-white" fill="currentColor" />
-                      ) : (
-                        <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Высокоточный волновой визуализатор Frequencies (Glowing Waveform) */}
-              <div className="w-full h-8 flex items-end justify-center gap-[3px] px-4 my-2 z-10 flex-shrink-0">
-                {[...Array(19)].map((_, i) => {
-                  const animDelay = `${i * 0.1}s`;
-                  const heightVal = isPlaying ? `${Math.floor(Math.random() * 20) + 8}px` : '4px';
-                  return (
-                    <div 
-                      key={i} 
-                      className="w-[3px] rounded-full transition-all duration-300"
-                      style={{ 
-                        height: heightVal,
-                        backgroundColor: themeColor,
-                        boxShadow: `0 0 8px ${themeColor}aa`,
-                        animation: isPlaying ? `liquid-silk-1 1.2s infinite ease-in-out alternate` : 'none',
-                        animationDelay: animDelay
-                      }}
-                    />
-                  );
-                })}
-              </div>
-
-              {/* Текст трека (Title & Artist) */}
-              <div className="w-full text-center mt-2 px-2 z-10 flex-shrink-0">
-                <h3 className="font-extrabold text-xl md:text-2xl tracking-tighter uppercase text-white truncate max-w-full">
-                  {selectedTrack?.title}
-                </h3>
-                <span className="text-[10px] font-black tracking-[0.2em] uppercase mt-0.5 block" style={{ color: themeColor }}>
-                  {selectedTrack?.artist}
-                </span>
-              </div>
-
+          {/* Station + Listeners */}
+          <div className="flex items-center gap-6">
+            {/* Listeners */}
+            <div className="hidden md:flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-50" style={{ backgroundColor: 'var(--accent)' }} />
+                <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: 'var(--accent)' }} />
+              </span>
+              <span className="label-mono">{listeners} online</span>
             </div>
 
-            {/* Стеклянная панель тактильного регулятора громкости (Frosted Volume Deck) */}
-            <div className="glass-panel glass-border-glow rounded-[2.5rem] p-5 flex flex-col gap-4 flex-shrink-0 relative">
-              
-              <div className="flex items-center justify-between select-none">
-                <span className="text-[9px] font-black tracking-[0.18em] uppercase text-white/40 font-mono">fluid level jog-dial</span>
-                <span className="text-[9px] font-black tracking-[0.18em] uppercase font-mono text-gray-500">{listenersCount} ONLINE</span>
-              </div>
+            {/* Station Toggle */}
+            <button
+              onClick={toggleStation}
+              className="group flex items-center gap-2 px-4 py-2 border border-[var(--border)] hover:border-[var(--accent-dim)] rounded-full transition-all duration-500 cursor-pointer"
+            >
+              <span className="label-mono group-hover:text-[var(--accent)] transition-colors">
+                {isDefault ? 'J-Pop / J-Rock' : 'OST'}
+              </span>
+              <svg className="w-3 h-3 text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-all group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
 
-              {/* Жидкий Volume Pill в стеклянной колбе */}
-              <div 
-                onWheel={handleVolumeWheel}
-                className="bg-white/[0.02] border border-white/5 rounded-2xl px-4 h-12 flex items-center justify-between gap-4 cursor-pointer hover:border-white/10 transition-colors select-none"
-              >
-                <button 
-                  onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }} 
-                  className="text-gray-400 hover:text-white transition flex-shrink-0 cursor-pointer p-1"
-                >
-                  {isMuted || volume === 0 ? (
-                    <VolumeX size={16} style={{ color: themeColor }} />
-                  ) : (
-                    <Volume2 size={16} />
-                  )}
-                </button>
+            {/* Queue Toggle */}
+            <button
+              onClick={() => setShowQueue(!showQueue)}
+              className="p-2 border border-[var(--border)] hover:border-[var(--accent-dim)] rounded-full transition-all duration-300 cursor-pointer group"
+              title="Navbat"
+            >
+              <svg className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        {/* ── Content Area ── */}
+        <main className="flex-1 flex flex-col lg:flex-row items-stretch px-6 md:px-10 gap-8 lg:gap-12 pb-32 lg:pb-36">
+
+          {/* ─── LEFT: Album Art + Track Info ─── */}
+          <div className="lg:w-[45%] xl:w-[42%] flex flex-col gap-6 fade-up">
+            
+            {/* Album Cover — cinematic */}
+            <div className="relative w-full aspect-square max-w-[480px] mx-auto lg:mx-0 group/cover">
+              {/* Shadow base */}
+              <div className="absolute -inset-4 bg-gradient-to-b from-transparent via-transparent to-black/40 rounded-lg blur-2xl opacity-60" />
+              
+              <div className="relative w-full h-full rounded-lg overflow-hidden cover-reveal">
+                <Image
+                  src={selectedTrack?.coverArt || '/images/ado-elf.jpg'}
+                  alt={selectedTrack?.title || 'Album Art'}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover/cover:scale-[1.03]"
+                  priority
+                />
+                {/* Cinematic gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface)] via-transparent to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[var(--surface)] via-transparent to-transparent opacity-30" />
                 
-                {/* Интерактивная полоса слайдера */}
-                <div 
-                  ref={volumeLineRef}
-                  onClick={handleVolumeClick}
-                  className="relative flex-1 h-5 flex items-center group/slider cursor-pointer"
+                {/* Play overlay on hover */}
+                <button
+                  onClick={togglePlay}
+                  className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/cover:opacity-100 transition-all duration-300 cursor-pointer bg-black/20"
                 >
-                  {/* Задний трек */}
-                  <div className="absolute w-full h-[2px] bg-white/10 rounded-full" />
-                  
-                  {/* Активная светящаяся полоса громкости */}
-                  <div 
-                    className="absolute h-[2px] rounded-full transition-all" 
-                    style={{ 
-                      width: `${(isMuted ? 0 : volume) * 100}%`, 
-                      backgroundColor: themeColor,
-                      boxShadow: `0 0 8px ${themeColor}cc`
-                    }} 
-                  />
-                  
-                  {/* Бегунок в виде пилюли */}
-                  <div 
-                    className="absolute w-2 h-4 rounded-full bg-white shadow-md transform scale-100 group-hover/slider:scale-115 transition-transform pointer-events-none"
-                    style={{ 
-                      left: `calc(${(isMuted ? 0 : volume) * 100}% - 4px)`,
-                      boxShadow: `0 0 6px ${themeColor}`
-                    }}
-                  />
-                </div>
+                  <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center backdrop-blur-sm bg-white/5 hover:bg-white/10 transition-all active:scale-95">
+                    {isPlaying ? (
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    )}
+                  </div>
+                </button>
+              </div>
+            </div>
 
-                {/* Процентное значение */}
-                <span className="font-mono text-[10px] font-black min-w-[28px] text-right" style={{ color: themeColor }}>
-                  {isMuted ? '0' : Math.round(volume * 100)}%
+            {/* Track Meta — editorial typography */}
+            <div className="fade-up fade-up-delay-1">
+              <div className="flex items-center gap-3 mb-3">
+                <WaveformBars />
+                <span className="label-mono" style={{ color: isPlaying ? 'var(--accent)' : 'var(--text-muted)' }}>
+                  {isPlaying ? 'eshiryapsiz' : 'to\'xtatilgan'}
                 </span>
               </div>
-            </div>
-
-          </div>
-
-          {/* ================= ПРАВАЯ КОЛОНКА: СУБТИТРЫ И ДЕТАЛИ В ПАНЕЛИ МАТОВОГО СТЕКЛА (7 COLS - h-[580px]) ================= */}
-          <div className="lg:col-span-7 flex flex-col lg:h-[580px] justify-between">
-            
-            <div className="glass-panel glass-border-glow rounded-[2.5rem] p-6 md:p-8 border border-white/5 h-full flex flex-col justify-between relative overflow-hidden">
-              <div className="glass-sheen-effect absolute inset-0 pointer-events-none rounded-inherit z-0 opacity-20" />
               
-              {/* Очередь треков на фоне (Minimal queue elements) */}
-              <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 left-full flex-col gap-2 z-[-1] pointer-events-none">
-                {displayTracks.map((track, i) => (
-                  <div 
-                    key={`${track}-${i}`}
-                    style={{
-                      '--item-opacity': Math.max(0.08, 0.9 - i * 0.14), 
-                      '--item-blur': `${i * 0.6}px` 
-                    } as React.CSSProperties}
-                    className="relative h-10 w-[140px] via-[#8a60c2]/5 to-[#8a60c2]/15 backdrop-blur-md border border-white/10 border-l-0 rounded-r-xl shadow-lg overflow-hidden opacity-[var(--item-opacity)] blur-[var(--item-blur)]"
-                  >
-                    <div className="absolute top-0 left-0 h-full w-full flex items-center px-4">
-                      <span className="flex-1 text-[11px] font-medium whitespace-nowrap truncate uppercase tracking-wider text-white">
-                        {track}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Переключатель вкладок на десктопе: Matn (Lyrics) / Tafsilotlar (Details) */}
-              <div className="flex bg-white/[0.02] border border-white/5 p-1 rounded-2xl flex-shrink-0 mb-6 w-fit select-none z-20">
-                <button 
-                  onClick={() => setActiveRightTab('lyrics')} 
-                  disabled={!selectedTrack?.lyrics}
-                  className={`px-5 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer ${
-                    !selectedTrack?.lyrics 
-                      ? 'opacity-30 cursor-not-allowed text-gray-500' 
-                      : activeRightTab === 'lyrics' 
-                        ? 'bg-[#8a60c2] text-white shadow-md' 
-                        : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <FileText size={12} /> Matn
-                </button>
-                <button 
-                  onClick={() => setActiveRightTab('details')} 
-                  className={`px-5 py-2 rounded-xl text-[10px] font-black tracking-widest uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer ${
-                    activeRightTab === 'details' 
-                      ? 'bg-[#8a60c2] text-white shadow-md' 
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <Info size={12} /> Musiqa haqida
-                </button>
-              </div>
-
-              {/* Содержимое правой колонки */}
-              <div className="flex-1 overflow-hidden relative z-10">
-                {activeRightTab === 'lyrics' && selectedTrack?.lyrics ? (
-                  <LyricsDisplay 
-                    lyrics={selectedTrack.lyrics} 
-                    currentTime={currentProgress} 
-                    trackName={selectedTrack.title} 
-                    artistName={selectedTrack.artist}
-                  />
-                ) : (
-                  // Musiqa haqida (Details Tab)
-                  <div className="h-full flex flex-col justify-start pr-2 overflow-y-auto custom-scrollbar select-text pb-4">
-                    
-                    {/* Квадратный баннер-обложка (если нет lyrics) */}
-                    {!selectedTrack?.lyrics && (
-                      <div className="flex items-center gap-5 p-5 bg-white/[0.01] border border-white/5 rounded-3xl mb-6 shadow-md select-none flex-shrink-0">
-                        <div className="relative w-16 h-16 rounded-2xl overflow-hidden shadow-lg border border-white/10">
-                          <Image 
-                            src={selectedTrack?.coverArt || '/images/ado-elf.jpg'} 
-                            alt="Album Art" 
-                            fill 
-                            className="object-cover" 
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-[9px] font-mono tracking-widest uppercase text-white/30 mb-0.5">Eshiryapsiz</span>
-                          <h4 className="text-white font-bold text-base leading-tight">«{selectedTrack?.title}»</h4>
-                          <span className="text-[11px] text-[#8a60c2] font-semibold mt-0.5">{selectedTrack?.artist}</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {currentTrackInfo ? (
-                      <div className="space-y-6">
-                        <div className="bg-white/[0.01] border border-white/5 p-5 rounded-3xl">
-                          <h4 className="text-[#8a60c2] text-[9px] font-mono tracking-widest uppercase mb-2 select-none">Qisqacha tavsif</h4>
-                          <p className="text-sm text-gray-200 leading-relaxed font-sans font-medium">
-                            {currentTrackInfo.description}
-                          </p>
-                        </div>
-                        
-                        <div className="space-y-4">
-                          <h4 className="text-[#8a60c2] text-[9px] font-mono tracking-widest uppercase pl-1 select-none">Batafsil tafsilotlar</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {currentTrackInfo.details.map((detail, idx) => (
-                              <div key={idx} className="bg-white/[0.01] border border-white/5 p-4 rounded-2xl flex flex-col justify-between hover:bg-white/[0.02] transition-colors select-text">
-                                <span className="text-[#8a60c2] text-[9px] font-mono tracking-widest uppercase mb-1">
-                                  {detail.title}
-                                </span>
-                                <p className="text-[11px] text-gray-400 font-sans leading-relaxed">
-                                  {detail.text}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="h-full flex flex-col items-center justify-center text-gray-500 select-none">
-                        <Music size={32} className="mb-2 opacity-30 animate-pulse-slow" />
-                        <p className="text-[10px] uppercase tracking-widest font-mono">Tafsilotlar mavjud emas</p>
-                      </div>
-                    )}
-
-                  </div>
-                )}
-              </div>
-
+              <h1 className="display-title text-4xl md:text-5xl lg:text-6xl text-white mb-2 leading-none">
+                {selectedTrack?.title}
+              </h1>
+              <p className="text-[var(--text-secondary)] text-lg md:text-xl font-light tracking-wide">
+                {selectedTrack?.artist}
+              </p>
             </div>
-
           </div>
 
-          {/* ================= НИЖНИЙ БЛОК: ОЧЕРЕДЬ, ТЕКСТ И ДЕТАЛИ (ТОЛЬКО ДЛЯ МОБИЛОК) ================= */}
-          <div className="md:hidden w-full flex flex-col gap-3 mt-2 px-1">
+          {/* ─── RIGHT: Lyrics / Info Panel ─── */}
+          <div className="lg:w-[55%] xl:w-[58%] flex flex-col min-h-0 fade-up fade-up-delay-2">
             
-            {/* Мобильные Вкладки: Очередь / Текст / Musiqa haqida */}
-            <div className="flex bg-[#000000]/60 backdrop-blur-xl p-1.5 rounded-2xl border border-white/5 shadow-xl select-none">
-              <button 
-                onClick={() => setMobileTab('queue')} 
-                className={`flex-1 py-3 rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${mobileTab === 'queue' ? 'bg-[#8a60c2] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}
-              >
-                Navbat
-              </button>
-              <button 
-                onClick={() => setMobileTab('lyrics')} 
+            {/* Panel Tabs */}
+            <div className="flex items-center gap-6 mb-6 flex-shrink-0 border-b border-[var(--border)] pb-4">
+              <button
+                onClick={() => setActivePanel('lyrics')}
                 disabled={!selectedTrack?.lyrics}
-                className={`flex-1 py-3 rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${!selectedTrack?.lyrics ? 'opacity-30 cursor-not-allowed text-gray-600' : mobileTab === 'lyrics' ? 'bg-[#8a60c2] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}
+                className="transition-all duration-300 cursor-pointer disabled:opacity-20 disabled:cursor-not-allowed"
+                style={{
+                  color: activePanel === 'lyrics' && selectedTrack?.lyrics ? 'var(--text-primary)' : 'var(--text-muted)',
+                }}
               >
-                Matn
+                <span className="label-mono text-[11px]" style={{ color: 'inherit' }}>Matn</span>
               </button>
-              <button 
-                onClick={() => setMobileTab('details')} 
-                className={`flex-1 py-3 rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${mobileTab === 'details' ? 'bg-[#8a60c2] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}
+              <button
+                onClick={() => setActivePanel('info')}
+                className="transition-all duration-300 cursor-pointer"
+                style={{
+                  color: activePanel === 'info' ? 'var(--text-primary)' : 'var(--text-muted)',
+                }}
               >
-                Tafsilot
+                <span className="label-mono text-[11px]" style={{ color: 'inherit' }}>Musiqa haqida</span>
               </button>
             </div>
 
-            {/* Мобильный Контейнер с контентом */}
-            <div className="bg-[#000000]/60 backdrop-blur-xl rounded-[2rem] p-5 border border-white/5 shadow-2xl h-[400px] relative overflow-hidden">
-              
-              {mobileTab === 'lyrics' && selectedTrack?.lyrics ? (
-                // ТЕКСТ ПЕСНИ (МОБИЛКА)
-                <div className="h-full w-full relative">
-                  <LyricsDisplay lyrics={selectedTrack.lyrics} currentTime={currentProgress} trackName={selectedTrack.title} artistName={selectedTrack.artist} />
-                </div>
-              ) : mobileTab === 'details' ? (
-                // ДЕТАЛИ ТРЕКА (МОБИЛКА)
-                <div className="h-full flex flex-col overflow-y-auto custom-scrollbar pr-2 select-text" style={{ maskImage: 'linear-gradient(to bottom, black 0%, black 90%, transparent)' }}>
-                  {currentTrackInfo ? (
-                    <div className="space-y-4">
-                      <div className="bg-white/5 p-4 rounded-xl">
-                        <h4 className="text-[#8a60c2] text-[9px] font-bold tracking-wider uppercase mb-1">Musiqa haqida</h4>
-                        <p className="text-xs text-gray-200 leading-relaxed font-sans">
-                          {currentTrackInfo.description}
+            {/* Panel Content */}
+            <div className="flex-1 overflow-hidden min-h-0">
+              {activePanel === 'lyrics' && selectedTrack?.lyrics ? (
+                <LyricsPanel lyrics={selectedTrack.lyrics} currentTime={progress} />
+              ) : (
+                <div className="h-full overflow-y-auto pr-2 space-y-6">
+                  {selectedTrack?.info ? (
+                    <>
+                      {/* Description */}
+                      <div className="fade-up">
+                        <p className="label-mono mb-3" style={{ color: 'var(--accent)' }}>Qisqacha</p>
+                        <p className="text-[var(--text-secondary)] text-sm leading-[1.8] font-light">
+                          {selectedTrack.info.description}
                         </p>
                       </div>
-                      <div className="space-y-3">
-                        {currentTrackInfo.details.map((detail, idx) => (
-                          <div key={idx} className="bg-white/5 p-3 rounded-xl border border-white/5">
-                            <strong className="text-[#8a60c2] text-[10px] block mb-0.5">{detail.title}</strong>
-                            <p className="text-[11px] text-gray-300 leading-relaxed font-sans">{detail.text}</p>
+
+                      {/* Divider */}
+                      <div className="w-12 h-[1px] bg-[var(--border)]" />
+
+                      {/* Details */}
+                      <div className="space-y-5 fade-up fade-up-delay-1">
+                        {selectedTrack.info.details.map((d, i) => (
+                          <div key={i} className="group">
+                            <p className="label-mono mb-2" style={{ color: 'var(--accent-dim)' }}>{d.title}</p>
+                            <p className="text-[var(--text-secondary)] text-sm leading-relaxed font-light pl-0 group-hover:pl-2 transition-all duration-300">
+                              {d.text}
+                            </p>
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </>
                   ) : (
-                    <p className="text-gray-500 text-center py-8">Tafsilotlar mavjud emas</p>
+                    <div className="h-full flex items-center justify-center">
+                      <p className="label-mono text-[var(--text-muted)]">Tafsilotlar mavjud emas</p>
+                    </div>
                   )}
-                </div>
-              ) : (
-                // ОЧЕРЕДЬ ТРЕКОВ (МОБИЛКА)
-                <div className="h-full flex flex-col overflow-y-auto custom-scrollbar pr-2" style={{ maskImage: 'linear-gradient(to bottom, black 0%, black 90%, transparent)' }}>
-                  <h3 className="text-[#8a60c2] text-[10px] font-bold uppercase tracking-widest mb-2 mt-1">Hozir efirda</h3>
-                  <div className="flex items-center gap-3 bg-white/5 p-3 rounded-xl border border-white/10 mb-4 flex-shrink-0">
-                     <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 shadow-md">
-                       <Image src={selectedTrack?.coverArt || '/images/ado-elf.jpg'} alt="cover" fill className="object-cover" />
-                     </div>
-                     <div className="flex flex-col overflow-hidden">
-                       <span className="text-sm font-bold text-white truncate">{selectedTrack?.artist} - {selectedTrack?.title}</span>
-                       <span className="text-[10px] font-medium text-[#8a60c2] flex items-center gap-1.5 mt-0.5">
-                         <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8a60c2] opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#b388eb]"></span>
-                          </span>
-                         Playing now
-                       </span>
-                     </div>
-                  </div>
-
-                  <h3 className="text-white/70 text-[10px] font-bold uppercase tracking-widest mb-3 mt-2">Keyingi treklar</h3>
-                  <div className="flex flex-col gap-3">
-                    {currentQueue.slice(0, 10).map((track, idx) => {
-                      const [artist, title] = track.split(' - ');
-                      return (
-                        <div key={idx} className="flex items-center gap-3 px-2 py-1">
-                           <div className="w-8 h-8 rounded-lg bg-white/5 flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-gray-500">
-                             {idx + 1}
-                           </div>
-                           <div className="flex flex-col overflow-hidden">
-                             <span className="text-xs font-medium text-gray-200 truncate">{title || track}</span>
-                             <span className="text-[10px] text-gray-500 truncate">{artist}</span>
-                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
                 </div>
               )}
             </div>
+          </div>
+        </main>
 
+        {/* ══════════════════════════════════════════════════════════
+             BOTTOM PLAYER BAR — fixed, ultra-minimal
+           ══════════════════════════════════════════════════════════ */}
+        <div className="fixed bottom-0 left-0 right-0 z-50">
+          {/* Progress line — full width */}
+          <div className="w-full h-[1px] bg-[var(--border)] relative">
+            <div
+              className="absolute top-0 left-0 h-full transition-all duration-300"
+              style={{
+                width: `${progressPercent}%`,
+                backgroundColor: 'var(--accent)',
+                boxShadow: '0 0 8px var(--accent)'
+              }}
+            />
           </div>
 
+          <div className="w-full bg-[var(--surface)]/95 backdrop-blur-xl border-t border-[var(--border)]">
+            <div className="max-w-screen-xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between gap-4">
+              
+              {/* Left: Now playing compact */}
+              <div className="flex items-center gap-4 min-w-0 flex-1">
+                {/* Mini cover */}
+                <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0 shadow-lg">
+                  <Image
+                    src={selectedTrack?.coverArt || '/images/ado-elf.jpg'}
+                    alt="cover"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0 hidden sm:block">
+                  <p className="text-sm font-medium text-white truncate">{selectedTrack?.title}</p>
+                  <p className="text-[11px] text-[var(--text-muted)] truncate">{selectedTrack?.artist}</p>
+                </div>
+              </div>
+
+              {/* Center: Play + Time */}
+              <div className="flex items-center gap-5">
+                <span className="label-mono text-[10px] hidden md:inline">{formatTime(progress)}</span>
+                
+                <button
+                  onClick={togglePlay}
+                  className="w-11 h-11 rounded-full border border-[var(--border)] hover:border-[var(--accent-dim)] flex items-center justify-center transition-all duration-300 cursor-pointer hover:bg-white/[0.03] active:scale-95 group"
+                >
+                  {isPlaying ? (
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  )}
+                </button>
+
+                <span className="label-mono text-[10px] hidden md:inline">{formatTime(duration)}</span>
+              </div>
+
+              {/* Right: Volume */}
+              <div className="flex items-center gap-3 flex-1 justify-end">
+                <button
+                  onClick={() => setIsMuted(!isMuted)}
+                  className="p-1.5 text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors cursor-pointer"
+                >
+                  {isMuted || volume === 0 ? (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-3.15a.75.75 0 011.28.53v13.74a.75.75 0 01-1.28.53L6.75 14.25H3.75a.75.75 0 01-.75-.75v-3a.75.75 0 01.75-.75h3z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-3.15a.75.75 0 011.28.53v12.74a.75.75 0 01-1.28.53l-4.72-3.15H3.75a.75.75 0 01-.75-.75v-3a.75.75 0 01.75-.75h3z" />
+                    </svg>
+                  )}
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={isMuted ? 0 : volume}
+                  onChange={(e) => {
+                    const v = parseFloat(e.target.value);
+                    setVolume(v);
+                    setIsMuted(v === 0);
+                  }}
+                  className="w-20 md:w-24 accent-[var(--accent)]"
+                />
+                <span className="label-mono text-[9px] min-w-[24px] text-right" style={{ color: 'var(--accent-dim)' }}>
+                  {isMuted ? '0' : Math.round(volume * 100)}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
+      </div>
 
-      {/* 4. НАСТОЯЩИЙ МОБИЛЬНЫЙ НАВИГАТОР СНИЗУ (ORIGINAL BottomBar) */}
-      <nav className="fixed bottom-0 left-0 right-0 h-16 px-5 w-full flex items-center justify-center bg-[#000000]/90 backdrop-blur-2xl border-t border-white/10 select-none z-[999] lg:hidden">
-        <div className="flex items-center justify-between w-full max-w-[400px]">
-          <button className="flex flex-col items-center justify-center gap-1 p-1 text-gray-500 hover:text-white transition-all cursor-pointer active:scale-95">
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.25 2H6.75A2.755 2.755 0 0 0 4 4.75v16c0 .26.135.5.35.635.22.135.495.15.725.04L12 18.085l6.925 3.34a.753.753 0 0 0 .725-.04.74.74 0 0 0 .35-.635v-16A2.755 2.755 0 0 0 17.25 2Zm1.25 17.555-6.5-3.14-6.5 3.14V4.75c0-.69.56-1.25 1.25-1.25h10.5c.69 0 1.25.56 1.25 1.25v14.805Z" />
-            </svg>
-            <span className="text-[9px] font-semibold tracking-wide font-sans mt-0.5">Saqlangan</span>
-          </button>
-          
-          <button className="flex flex-col items-center justify-center gap-1 p-1 text-gray-500 hover:text-white transition-all cursor-pointer active:scale-95">
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M6.75 3.5c-.69 0-1.25.56-1.25 1.25V16.8c.375-.192.8-.3 1.25-.3H18.5v-13H6.75ZM18.5 18H6.75a1.25 1.25 0 1 0 0 2.5H18.5V18ZM4 19.25V4.75A2.75 2.75 0 0 1 6.75 2H20v20H6.75A2.75 2.75 0 0 1 4 19.25Z" />
-            </svg>
-            <span className="text-[9px] font-semibold tracking-wide font-sans">Katalog</span>
-          </button>
+      {/* ══════════════════════════════════════════════════════════
+           QUEUE PANEL — slide from right
+         ══════════════════════════════════════════════════════════ */}
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 z-[90] bg-black/50 transition-opacity duration-500 ${showQueue ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => setShowQueue(false)}
+      />
 
-          {/* Фирменный логотип по центру */}
-          <button className="flex flex-col items-center justify-center p-1 cursor-pointer active:scale-95 -translate-y-1 animate-pulse" style={{ color: themeColor }}>
-            <svg className="w-11 h-11" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 93.933 111.97">
-              <g><path d="m 77.651831,81.019945 a 27.501443,10.766962 65.856372 0 0 -1.370976,0.37931 27.501443,10.766962 65.856372 0 0 1.545126,29.617835 27.501443,10.766962 65.856372 0 0 12.423529,17.81389 38.010708,34.932919 0 0 0 -6.42545,4.73253 38.010708,34.932919 0 0 0 -9.302787,13.92525 38.010708,34.932919 0 0 0 -1.458309,5.71283 38.010708,34.932919 0 0 0 -0.406694,5.0953 38.010708,34.932919 0 0 0 0.163815,3.23856 22.006201,23.633765 0 0 1 0.155029,1.27589 22.006201,23.633765 0 0 1 0.115755,2.41949 22.006201,23.633765 0 0 1 -0.209806,3.25458 22.006201,23.633765 0 0 1 -8.962761,15.94425 22.608014,23.237316 0 0 0 17.436658,8.44651 22.608014,23.237316 0 0 0 11.88817,-3.47214 20.472755,20.609692 0 0 1 -0.80874,-0.59427 20.472755,20.609692 0 0 1 -7.70857,-12.8788 20.472755,19.753529 0 0 0 4.64984,1.87688 20.472755,19.753529 0 0 1 -3.48816,-11.02878 20.472755,19.753529 0 0 1 0.0594,-1.50585 20.472755,19.753529 0 0 1 0.0765,-0.76585 20.472755,19.753529 0 0 1 0.004,-0.032 24.789677,18.948704 0 0 0 0.0124,-0.008 24.789677,18.948704 0 0 0 4.11086,-3.15639 24.789677,18.948704 0 0 0 4.37648,-6.60839 24.789677,18.948704 0 0 0 0.032,-0.0889 9.0917225,9.9998608 0 0 1 0.0207,0.67231 9.0917225,9.9998608 0 0 1 -1.78181,5.94589 24.093296,25.166134 0 0 0 3.14813,-0.49609 20.472755,19.753529 0 0 1 2.47892,-4.90358 20.472755,19.753529 0 0 0 -2.47892,4.90358 24.093296,25.166134 0 0 0 14.91227,-10.66343 24.093296,25.166134 0 0 0 15.02544,10.76006 24.093296,25.166134 0 0 0 3.08818,0.48266 9.0917225,9.9998608 0 0 1 -1.7818,-5.94589 9.0917225,9.9998608 0 0 1 0.0207,-0.67231 24.789677,18.948704 0 0 0 0.032,0.0889 24.789677,18.948704 0 0 0 4.37647,6.60838 24.789677,18.948704 0 0 0 4.11086,3.1564 24.789677,18.948704 0 0 0 0.0124,0.008 20.472755,19.753529 0 0 1 0.004,0.032 20.472755,19.753529 0 0 1 0.0765,0.76585 20.472755,19.753529 0 0 1 0.0594,1.50585 20.472755,19.753529 0 0 1 -3.48816,11.02878 20.472755,19.753529 0 0 0 4.64985,-1.87689 20.472755,20.609692 0 0 1 -7.1019,12.39098 38.010708,34.932919 0 0 0 7.76749,-5.55987 38.010708,34.932919 0 0 1 -7.76749,5.55987 38.010708,34.932919 0 0 1 -5.1e-4,5.2e-4 20.472755,20.609692 0 0 1 -1.41542,1.0821 22.608014,23.237316 0 0 0 11.88816,3.47214 22.608014,23.237316 0 0 0 17.43666,-8.44651 22.006201,23.633765 0 0 1 -8.96276,-15.94425 22.006201,23.633765 0 0 1 -0.2098,-3.25458 22.006201,23.633765 0 0 1 0.11575,-2.41949 22.006201,23.633765 0 0 1 0.15503,-1.27589 38.010708,34.932919 0 0 0 0.16382,-3.23856 38.010708,34.932919 0 0 0 -0.4067,-5.0953 38.010708,34.932919 0 0 0 -1.45831,-5.71283 38.010708,34.932919 0 0 0 -9.30279,-13.92525 38.010708,34.932919 0 0 0 -6.42545,-4.73253 10.766962,27.501443 24.143628 0 0 12.42354,-17.8139 10.766962,27.501443 24.143628 0 0 1.54512,-29.617835 10.766962,27.501443 24.143628 0 0 -1.37097,-0.3793 10.766962,27.501443 24.143628 0 0 -19.69441,20.901055 10.766962,27.501443 24.143628 0 0 -5.11493,22.26582 38.010708,34.932919 0 0 0 -1.41335,-0.21394 38.010708,34.932919 0 0 0 -0.006,-0.002 38.010708,34.932919 0 0 0 -2.09445,-0.31678 38.010708,34.932919 0 0 0 -1.58802,-0.13642 l -5.1e-4,5.1e-4 a 38.010708,34.932919 0 0 0 -2.66496,-0.22944 38.010708,34.932919 0 0 0 -0.87385,-0.009 38.010708,34.932919 0 0 0 -8.20569,0.82372 27.501443,10.766962 65.856372 0 0 -5.11494,-22.26634 27.501443,10.766962 65.856372 0 0 -19.694402,-20.901055 z m 34.479029,66.806265 a 20.472755,19.753529 0 0 1 7.50342,3.91346 20.472755,19.753529 0 0 1 2.0438,1.93321 20.472755,19.753529 0 0 0 -2.0438,-1.93321 20.472755,19.753529 0 0 0 -7.50342,-3.91346 z m -5.14852,1.03353 a 20.472755,19.753529 0 0 0 -4.78214,2.91093 20.472755,19.753529 0 0 0 -2.03346,1.9048 20.472755,19.753529 0 0 1 2.03346,-1.9048 20.472755,19.753529 0 0 1 4.78214,-2.91093 z" transform="translate(-63.918301,-80.989785)" /></g>
-            </svg>
-            <span className="text-[9px] font-semibold tracking-wide font-sans mt-0.5">Radio</span>
-          </button>
-          
-          <button 
-            onClick={() => setIsMobileMenuOpen(true)}
-            className="flex flex-col items-center justify-center gap-1 p-1 text-gray-500 hover:text-white transition-all cursor-pointer active:scale-95"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M21 5.5H3V7h18V5.5Zm0 5.75H3v1.5h18v-1.5ZM3 17h18v1.5H3V17Z" />
-            </svg>
-            <span className="text-[9px] font-semibold tracking-wide font-sans">Menyu</span>
-          </button>
+      {/* Panel */}
+      <div
+        className={`fixed top-0 right-0 h-full w-[340px] md:w-[400px] bg-[var(--surface)] border-l border-[var(--border)] z-[100] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${showQueue ? 'translate-x-0' : 'translate-x-full'}`}
+      >
+        <div className="flex flex-col h-full px-6 py-8">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8 flex-shrink-0">
+            <span className="label-mono text-[11px]">Navbatdagi treklar</span>
+            <button
+              onClick={() => setShowQueue(false)}
+              className="p-2 text-[var(--text-muted)] hover:text-white transition-colors cursor-pointer"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Now Playing */}
+          {selectedTrack && (
+            <div className="flex items-center gap-4 pb-6 mb-6 border-b border-[var(--border)] flex-shrink-0">
+              <div className="relative w-12 h-12 rounded overflow-hidden flex-shrink-0">
+                <Image src={selectedTrack.coverArt} alt="cover" fill className="object-cover" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-white truncate">{selectedTrack.title}</p>
+                <p className="text-[11px] text-[var(--text-muted)] truncate">{selectedTrack.artist}</p>
+              </div>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-50" style={{ backgroundColor: 'var(--accent)' }} />
+                  <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: 'var(--accent)' }} />
+                </span>
+                <span className="label-mono text-[8px]" style={{ color: 'var(--accent)' }}>LIVE</span>
+              </div>
+            </div>
+          )}
+
+          {/* Queue List */}
+          <div className="flex-1 overflow-y-auto space-y-1 pr-1">
+            {queue.map((track, idx) => {
+              const parts = track.split(' — ');
+              return (
+                <div
+                  key={idx}
+                  className="flex items-center gap-4 px-3 py-3 rounded-lg hover:bg-[var(--surface-hover)] transition-colors group cursor-default"
+                >
+                  <span className="label-mono text-[10px] w-5 text-center" style={{ color: 'var(--text-muted)' }}>
+                    {(idx + 1).toString().padStart(2, '0')}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm text-[var(--text-secondary)] truncate group-hover:text-white transition-colors">
+                      {parts[1] || track}
+                    </p>
+                    <p className="text-[10px] text-[var(--text-muted)] truncate">
+                      {parts[0]}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </nav>
+      </div>
 
-      {/* Скрытый аудиоэлемент */}
+      {/* Hidden audio */}
       <audio ref={audioRef} className="hidden" />
     </div>
   );

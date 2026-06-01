@@ -1,10 +1,25 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Google_Sans_Flex, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { GlobalMiniPlayer } from "@/components/GlobalMiniPlayer";
 
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
+const googleSansFlex = Google_Sans_Flex({
+  variable: "--font-google-sans-flex",
+  subsets: ["latin", "latin-ext"],
+  adjustFontFallback: false,
+  display: "swap",
+  fallback: ["system-ui", "arial", "sans-serif"],
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500"],
+  variable: "--font-dm-mono",
+  display: "swap",
+  adjustFontFallback: false,
+  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "monospace"], 
+});
 
 export const metadata: Metadata = {
   title: "KawaiiUZ - Аниме радио",
@@ -17,8 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
-      <body className={`${spaceGrotesk.className} bg-[#0b090f] text-white antialiased`}>
+    <html lang="ru" className={`${googleSansFlex.variable} ${dmMono.variable} antialiased`} suppressHydrationWarning>
+      <body className="antialiased">
         <AudioPlayerProvider>
           {children}
           <GlobalMiniPlayer />

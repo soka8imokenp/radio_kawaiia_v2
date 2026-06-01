@@ -1,91 +1,180 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #8a60c2;
+  --color-primary-dark: #27143a;
+  --color-gray: #909090;
+  --color-green: #60c28a;
+  --color-yellow: #facc15;
+  --color-red: #c26060;
+  --color-blue: #60a5fa;
+  --color-orange: #f97316;
+  --color-pink: #f472b6;
+
+  --color-amethyst: #daa1d9;
+  --color-ruby: #fd3d60;
+  --color-emerald: #48c28b;
+  --color-gold: #f2ba47;
+  --color-iron: #858585;
+  --color-wood: #bd7c5a;
+
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  
+  --grid-color: rgba(138, 96, 194, 0.05);
+  --grid-color-bright: rgba(138, 96, 194, 0.25);
+  color-scheme: dark;
+}
+
+.dark {
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  
+  --grid-color: rgba(138, 96, 194, 0.06);
+  --grid-color-bright: rgba(138, 96, 194, 0.3);
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+
+  --color-primary: var(--color-primary);
+  --color-green: var(--color-green);
+  --color-yellow: var(--color-yellow);
+  --color-gray: var(--color-gray);
+  --color-red: var(--color-red);
+  --color-blue: var(--color-blue);
+  --color-orange: var(--color-orange);
+  --color-pink: var(--color-pink);
+
+  --color-amethyst: var(--color-amethyst);
+  --color-ruby: var(--color-ruby);
+  --color-emerald: var(--color-emerald);
+  --color-gold: var(--color-gold);
+  --color-iron: var(--color-iron);
+  --color-wood: var(--color-wood);
+
+  --font-sans: var(--font-google-sans-flex);
+  --font-dm-mono: var(--font-dm-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+*::-webkit-scrollbar {
+  display: none !important;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #000000;
+  color: #ffffff;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--color-primary);
+  color: white;
 }
 
 /* =========================================
    Кастомный скроллбар (Custom Scrollbar)
    ========================================= */
 .custom-scrollbar::-webkit-scrollbar {
+  display: block !important;
   width: 4px;
+}
+.custom-scrollbar {
+  scrollbar-width: thin !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(138, 96, 194, 0.02);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #8a60c2;
+  background: var(--color-primary);
   border-radius: 10px;
 }
 
 /* =========================================
-   Кастомный ползунок (Input Range / Volume)
+   3D Перспектива и Стили Синтезатора
    ========================================= */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
+.perspective-container {
+  perspective: 1200px;
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
-  background: rgba(255, 255, 255, 0.2);
-  height: 4px;
-  border-radius: 4px;
+.tilt-element {
+  transform-style: preserve-3d;
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
 }
 
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  margin-top: -6px;
-  background-color: #8a60c2;
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  border: none;
-  box-shadow: 0 0 6px #8a60c2;
+.preserve-3d {
+  transform-style: preserve-3d;
 }
 
-input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
+/* Эффект Голографического Экрана */
+.hologram-panel {
+  position: relative;
+  background: rgba(10, 8, 14, 0.45);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              0 0 40px rgba(138, 96, 194, 0.03);
 }
 
-input[type="range"]::-moz-range-track {
-  background: rgba(255, 255, 255, 0.2);
-  height: 4px;
-  border-radius: 4px;
+.hologram-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.18) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 10;
+  opacity: 0.8;
+  border-radius: inherit;
 }
 
-input[type="range"]::-moz-range-thumb {
-  background-color: #8a60c2;
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  border: none;
+.hologram-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 70%
+  );
+  z-index: 11;
+  border-radius: inherit;
+}
+
+/* Hologram Scanning Line Animation */
+@keyframes hologram-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.hologram-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.12), transparent);
+  animation: hologram-scan 6s linear infinite;
+  pointer-events: none;
+  z-index: 12;
 }
 
 /* =========================================
@@ -93,13 +182,13 @@ input[type="range"]::-moz-range-thumb {
    ========================================= */
 
 /* Пульсация (Pulse) */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.95; filter: drop-shadow(0 0 15px currentColor); }
+  50% { opacity: 0.55; filter: drop-shadow(0 0 5px currentColor); }
 }
 
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
 }
 
 /* Медленное вращение винила (Spin Slow) */
@@ -109,7 +198,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .animate-spin-slow {
-  animation: spin-slow 8s linear infinite;
+  animation: spin-slow 15s linear infinite;
 }
 
 /* Волны (Ping) */
@@ -121,15 +210,23 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .animate-ping {
-  animation: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation: ping 4s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
-/* =========================================
-   Утилиты (Utilities)
-   ========================================= */
-.mask-image-fade {
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+/* Сетка (SpotlightGrid) */
+.grid-bg {
+  background-color: #000000;
+  background-image: 
+      linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 100px 100px;
+}
+
+.grid-bg-bright {
+  background-image: 
+      linear-gradient(to right, var(--grid-color-bright) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-color-bright) 1px, transparent 1px);
+  background-size: 100px 100px;
 }
 
 .writing-mode-vertical {
@@ -137,10 +234,80 @@ input[type="range"]::-moz-range-thumb {
   text-orientation: mixed;
 }
 
-@keyframes loading-bar {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+/* Glitch VHS Animation for Transitions */
+@keyframes vhs-glitch {
+  0% {
+    clip-path: inset(40% 0 61% 0);
+    transform: skew(0.3deg);
+  }
+  20% {
+    clip-path: inset(92% 0 1% 0);
+    transform: skew(-0.8deg);
+  }
+  40% {
+    clip-path: inset(15% 0 80% 0);
+    transform: skew(0.5deg);
+  }
+  60% {
+    clip-path: inset(80% 0 5% 0);
+    transform: skew(-0.3deg);
+  }
+  80% {
+    clip-path: inset(3% 0 92% 0);
+    transform: skew(0.8deg);
+  }
+  100% {
+    clip-path: inset(40% 0 61% 0);
+    transform: skew(0deg);
+  }
 }
-.animate-loading-bar {
-  animation: loading-bar 2s infinite linear;
+
+.vhs-glitch-overlay {
+  animation: vhs-glitch 1s infinite linear alternate-reverse;
+}
+
+/* Synth Dial Dragging State cursor */
+.dial-dragging {
+  cursor: grabbing !important;
+}
+
+/* Floating telemetry data typography */
+.telemetry-text {
+  font-family: var(--font-dm-mono), monospace;
+  letter-spacing: 0.15em;
+  font-size: 9px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Custom styled inputs for range sliders */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: rgba(255, 255, 255, 0.05);
+  height: 2px;
+  border-radius: 1px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -5px;
+  background-color: #ffffff;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+  background-color: var(--color-primary);
 }

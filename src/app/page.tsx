@@ -38,7 +38,7 @@ const defaultPlaylist: Track[] = [
     coverArt: '/images/ado-elf.jpg',
     audioSrc: '/music/Ado-Elf.mp3',
     lyrics: {
-      uzbek: `Elf - Ado (O'zbek tilida)\n\n[00:01.02] Yugur, yugur, tezroq, yanada tezroq,\n[00:06.92] Yetolmasin senga g'am bilan firoq.\n[00:12.93] Qidirgin nurlarga chulg'angan yo'lni,\n[00:19.09] O'sha yo'l o'ziga chorlar ko'ngilni.\n\n[00:26.53] Qarshi tur, chiroying hamda qadringni,\n[00:32.60] Toptab, ozor bermoq istaganlarga.\n[00:38.52] Charchasang uxlab ol, orom ol, sokin,\n[00:44.53] Afsonasi yo'q yulduzlar kabi jim.\n\n[00:50.98] Qo'limni qo'yib yuborgach o'sha dam,\n[00:53.87] Sezarsan barmoqlarim,\n[00:56.95] Tana taftim ham.\n[01:00.29] Ularning izlari dilingga sanchilar...\n\n[01:08.23] Unutganingni ham unutgin butun,\n[01:14.58] G'am hamda harorat yo'qolsin bugun.\n[01:20.56] Lekin quloqlarda hamon jaranglar,\n[01:26.85] Diydor orzusiga to'lib ohanglar:\n[01:32.33] "Alvido"\n[01:35.25] Alvido, alvido...\n[01:38.04] Sevaman, sen-chi?\n\n[01:44.50] Raqsga tush, kim kulmasin senga,\n[01:50.36] Qor yog'gan shoxlar kabi.\n[01:56.47] Baqir, chin qalbingdan baqir,\n[02:02.51] Borlig'ingni eshittir bu yerga.\n\n[02:08.99] Uzoqdagi gulxanlar xiralashar,\n[02:14.75] Qaytadigan uyni qidirar.\n[02:18.21] Agar uzun, uzun yo'lga chiqsang,\n[02:26.43] Baland ovozda ursin yuraging,\n[02:32.31] So'nggi zarbagacha seniki u.\n[02:38.57] Yosh, yosh, to'kilsin,\n[02:44.89] Tomchilar o'rmoningni o'stirar.\n\n[03:02.49] Bu ming yillik sog'inch edi,\n[03:08.89] Cheksizlikni sanab bo'lgach,\n[03:14.52] Hayvonga o'xshagan dunyoning burchagida,\n[03:20.33] Jang qilayotgan inson.\n[03:23.98] Sen elf, elf san,\n[03:27.25] Sevimli sayohat davom etadi.\n\n[03:33.54] Unutganingni ham unutgin,\n[03:39.90] G'am va harorat yo'qolsin,\n[03:45.59] Lekin hanuz quloqlarda qolgan,\n[03:52.22] Qattiq uchrashishni tilagan:\n[03:57.78] "Alvido"\n[04:00.65] Adieu, adieu\n[04:03.52] Sevaman, sen-chi?\n[04:06.61] Alvido, alvido`,
+      uzbek: `Elf - Ado (O'zbek tilida)\n\n[00:01.02] Yugur, yugur, tezroq, yanada tezroq,\n[00:06.92] Yetolmasin senga g'am bilan firoq.\n[00:12.93] Qidirgin nurlarga chulg'angan yo'lni,\n[00:19.09] O'sha yo'l o'ziga chorlar ko'ngilni.\n\n[00:26.53] Qarshi tur, chiroying hamda qadringni,\n[00:32.60] Toptab, ozor bermoq istaganlarga.\n[00:38.52] Charchasang uxlab ol, orom ol, sokin,\n[00:44.53] Afsonasi yo'q yulduzlar kabi jim.\n\n[00:50.98] Qo'limni qo'yib yuborgach o'sha dam,\n[00:53.87] Sezarsan barmoqlarim,\n[00:56.95] Tana taftim ham.\n[01:00.29] Ularning izlari dilingga sanchilar...\n\n[01:08.23] Unutganingni ham unutgin butun,\n[01:14.58] G'am hamda harorat yo'olsin bugun.\n[01:20.56] Lekin quloqlarda hamon jaranglar,\n[01:26.85] Diydor orzusiga to'lib ohanglar:\n[01:32.33] "Alvido"\n[01:35.25] Alvido, alvido...\n[01:38.04] Sevaman, sen-chi?\n\n[01:44.50] Raqsga tush, kim kulmasin senga,\n[01:50.36] Qor yog'gan shoxlar kabi.\n[01:56.47] Baqir, chin qalbingdan baqir,\n[02:02.51] Borlig'ingni eshittir bu yerga.\n\n[02:08.99] Uzoqdagi gulxanlar xiralashar,\n[02:14.75] Qaytadigan uyni qidirar.\n[02:18.21] Agar uzun, uzun yo'lga chiqsang,\n[02:26.43] Baland ovozda ursin yuraging,\n[02:32.31] So'nggi zarbagacha seniki u.\n[02:38.57] Yosh, yosh, to'kilsin,\n[02:44.89] Tomchilar o'rmoningni o'stirar.\n\n[03:02.49] Bu ming yillik sog'inch edi,\n[03:08.89] Cheksizlikni sanab bo'lgach,\n[03:14.52] Hayvonga o'xshagan dunyoning burchagida,\n[03:20.33] Jang qilayotgan inson.\n[03:23.98] Sen elf, elf san,\n[03:27.25] Sevimli sayohat davom etadi.\n\n[03:33.54] Unutganingni ham unutgin,\n[03:39.90] G'am va harorat yo'qolsin,\n[03:45.59] Lekin hanuz quloqlarda qolgan,\n[03:52.22] Qattiq uchrashishni tilagan:\n[03:57.78] "Alvido"\n[04:00.65] Adieu, adieu\n[04:03.52] Sevaman, sen-chi?\n[04:06.61] Alvido, alvido`,
       romaji: `Elf - Ado (Romaji)\n\n[00:01.02] Hashirinasai hayaku motto hayaku\n[00:06.92] Kanashimi ni oitsukarenai you ni\n[00:12.93] Sagashinasai akari no tomoru michi wo\n[00:19.09] Sore wa sore wa mabayui deshou\n\n[00:26.53] Idominasai kimi no utsukushisa ya\n[00:32.60] Toutosa wo kizutsukeru mono ni\n[00:38.52] Nemurinasai tsukaretara nemurinasai\n[00:44.53] Shinwa wo motanai ano seiza no you ni\n\n[00:50.98] Te wo hanashita ato\n[00:53.87] Kimi wa kizuku darou\n[00:56.95] Yubi no katachi taion\n[01:00.29] Sono nagori ga mune wo sasu\n\n[01:08.23] Wasureta koto mo wasurete shimae\n[01:14.58] Kanashimi mo nukumori kiete shimae\n[01:20.56] Saredo ima mo mimi ni nokoru wa\n[01:26.85] Kataku saikai wo negau you na\n[01:32.33] "Sayounara"\n[01:35.25] Adieu, adieu\n[01:38.04] Love you, and you?\n\n[01:44.50] Odorinasai dare ni warawarete mo\n[01:50.36] Ausuyuki wo harau eda no you ni\n[01:56.47] Sakebinasai kokoro kara sakebinasai\n[02:02.51] Koko ni tashika ni ita n da to hibikasete\n\n[02:08.99] Yukiai no sora ni tohankanabi ga nijimu\n[02:14.75] Kaerubeki ie wo sagasu\n[02:18.21] Nagai nagai tabiji wo yuku nara\n[02:26.43] Takara ka narase sono shinzou wa\n[02:32.31] Saigo no ichi uch made kimi no mono da\n[02:38.57] Namida namida afureru ga ii\n[02:44.89] Furu shizuku ga kimi no mori wo sodateru darou\n\n[03:02.49] Sore wa sennen no homushikku deshita\n[03:08.89] Mugen sae mo kazoeoete\n[03:14.52] Kaibutsu no you na sekai no sumikko de\n[03:20.33] Tatakai tsuzukeru hito\n[03:23.98] Kimi wa erufu erufu\n[03:27.25] Itoshiki tabi wa tsudzuku\n\n[03:33.54] Wasureta koto mo wasurete shimae\n[03:39.90] Kanashimi mo nukumori mo kie chimae\n[03:45.59] Saredo ima mo ima mo mimi ni nokoru wa\n[03:52.22] Kataku saikai wo negau you na\n[03:57.78] "Sayounara"\n[04:00.65] Adieu, adieu\n[04:03.52] Love you, and you?\n[04:06.61] Adieu, adieu`
     },
     isAnimeOpening: false,
@@ -79,7 +79,7 @@ const ostPlaylist: Track[] = [
 const defaultUpcomingTracks = [
   "Ado - Rockstar",
   "9lana - プロポーズ",
-  "DECO*27 - モニタリング",
+  "DECO*27 - モニтаリング",
   "KIRA - CRASH THE PARTY",
   "Vaundy - Odoriko",
   "YOASOBI - Idol",
@@ -188,14 +188,14 @@ const LyricsDisplay = ({ lyrics, currentTime, trackName, artistName }: { lyrics:
   }
 
   return (
-    <div className="flex flex-col h-full overflow-hidden w-full relative z-10">
+    <div className="flex flex-col h-full overflow-hidden w-full relative z-10 select-none">
       <div className="flex items-center justify-between mb-4 md:mb-6 flex-shrink-0 px-2 select-none">
         <div className="overflow-hidden mr-2">
-          <h3 className="text-lg md:text-xl font-black text-white tracking-tight truncate">"{trackName}"</h3>
-          <p className="text-xs text-gray-400 mt-1 truncate">Musiqachi: {artistName}</p>
+          <h3 className="text-lg md:text-xl font-bold text-white tracking-tight truncate">"{trackName}"</h3>
+          <p className="text-xs text-gray-400 mt-1 truncate font-medium">Musiqachi: {artistName}</p>
         </div>
         
-        <div className="flex flex-shrink-0 bg-white/5 p-1 rounded-xl backdrop-blur-md border border-white/5">
+        <div className="flex flex-shrink-0 bg-white/5 p-1 rounded-xl backdrop-blur-md border border-white/10">
           {languages.map((lang) => (
             <button
               key={lang.key}
@@ -229,10 +229,10 @@ const LyricsDisplay = ({ lyrics, currentTime, trackName, artistName }: { lyrics:
               <p 
                 className={`transition-all duration-300 inline-block px-3 md:px-4 py-1.5 md:py-2 rounded-xl text-sm md:text-base ${
                   isActive 
-                    ? 'bg-[#8a60c2]/20 text-white font-medium md:text-lg shadow-[0_0_15px_rgba(138,96,194,0.15)]' 
+                    ? 'bg-[#8a60c2]/20 text-white font-semibold md:text-lg shadow-[0_0_15px_rgba(138,96,194,0.25)]' 
                     : isNear
-                      ? 'text-gray-300 opacity-80'
-                      : 'text-gray-600 opacity-40'
+                      ? 'text-white/70 opacity-80'
+                      : 'text-white/30 opacity-30'
                 }`}
               >
                 {item.line}
@@ -318,10 +318,11 @@ export default function RadioPage() {
 
     if (selectedTrack && audioRef.current) {
       const audio = audioRef.current;
+      const wasPlaying = isPlaying;
       audio.src = selectedTrack.audioSrc;
       audio.load();
       
-      if (isPlaying) {
+      if (wasPlaying) {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
           playPromise.catch(err => {
@@ -429,6 +430,35 @@ export default function RadioPage() {
     setIsMuted(finalVol === 0);
   };
 
+  // 3D-наклон карточки обложки
+  const handleCoverMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const normX = x / (rect.width / 2);
+    const normY = y / (rect.height / 2);
+    const tiltX = normX * 8; 
+    const tiltY = -normY * 8;
+    card.style.transform = `perspective(1200px) rotateX(${tiltY}deg) rotateY(${tiltX}deg) scale(1.025)`;
+    
+    // Блик на стекле
+    const gloss = card.querySelector('.glass-gloss') as HTMLElement;
+    if (gloss) {
+      gloss.style.background = `radial-gradient(circle at ${(normX + 1) * 50}% ${(normY + 1) * 50}%, rgba(255, 255, 255, 0.22) 0%, transparent 60%)`;
+    }
+  };
+
+  const handleCoverMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    card.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1)`;
+    
+    const gloss = card.querySelector('.glass-gloss') as HTMLElement;
+    if (gloss) {
+      gloss.style.background = `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%)`;
+    }
+  };
+
   const displayTracks = selectedTrack 
     ? [`${selectedTrack.artist} - ${selectedTrack.title}`, ...currentQueue.slice(0, 9)] 
     : currentQueue.slice(0, 10);
@@ -441,40 +471,43 @@ export default function RadioPage() {
   const stationHoverSubLabels = isDefaultStation ? ['S','T','A','T','I','O','N'] : ['J','-','R','O','C','K'];
 
   return (
-    <div className="min-h-screen bg-[#000000] relative overflow-x-hidden flex flex-col justify-between select-none text-white">
+    <div className="min-h-screen bg-[#020105] relative overflow-hidden flex flex-col justify-between select-none text-white font-sans">
       
-      {/* 1. Ультраминималистичный анимированный бэкглоу */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[20%] left-[10%] w-[350px] h-[350px] bg-[#8a60c2]/10 blur-[130px] rounded-full animate-pulse-slow" />
-        <div className="absolute bottom-[20%] right-[10%] w-[450px] h-[450px] bg-[#4a2f8a]/8 blur-[150px] rounded-full" />
+      {/* 1. ШИКАРНЫЙ ЖИДКИЙ ШЕЛКОВЫЙ ФОН (Dynamic Liquid Silk Mesh Gradient) */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[#020105]">
+        <div className="absolute top-[-30%] left-[-20%] w-[120%] h-[120%] bg-gradient-to-tr from-[#3b1d60] via-[#8a60c2]/30 to-[#120824] opacity-80 blur-[80px]" />
+        
+        {/* Анимированные жидкие сферы */}
+        <div className="absolute top-[10%] left-[10%] w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#8a60c2]/35 via-[#b388eb]/25 to-transparent blur-[120px] animate-liquid-silk-1 pointer-events-none" />
+        <div className="absolute bottom-[10%] right-[10%] w-[700px] h-[700px] rounded-full bg-gradient-to-bl from-[#4a2f8a]/40 via-[#8a60c2]/20 to-transparent blur-[140px] animate-liquid-silk-2 pointer-events-none" />
       </div>
 
-      {/* 2. НАСТОЯЩИЙ НАВИГАЦИОННЫЙ ХЕДЕР ИЗ ВАШЕГО ПОРТАЛА (ORIGINAL TopBar) */}
-      <header className="sticky top-0 h-16 w-full border-b border-white/5 bg-[#000000]/70 backdrop-blur-xl z-50 select-none">
+      {/* 2. НАСТОЯЩИЙ НАВИГАЦИОННЫЙ ХЕДЕР ИЗ ВАШЕГО ПОРТАЛА (Frosted Original TopBar) */}
+      <header className="sticky top-0 h-16 w-full border-b border-white/10 bg-[#000000]/40 backdrop-blur-2xl z-[999] select-none">
         <div className="flex items-center justify-between w-full max-w-[1150px] mx-auto h-full px-6">
           <button className="flex cursor-pointer transition-transform duration-200 active:scale-95">
-            <span className="font-bold text-4xl text-white">
+            <span className="font-extrabold text-4xl text-white tracking-tight">
               Kawa<span style={{ color: themeColor }}>ii</span>
             </span>
           </button>
           
           <div className="hidden lg:flex items-center justify-center text-white h-full gap-7">
-            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/60 hover:text-white">
+            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/70 hover:text-white">
               <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="m21.78 20.72-4.34-4.34a8.702 8.702 0 0 0 2.06-5.63C19.5 5.925 15.575 2 10.75 2S2 5.925 2 10.75s3.925 8.75 8.75 8.75a8.702 8.702 0 0 0 5.63-2.06l4.34 4.34 1.06-1.06ZM3.5 10.75c0-4 3.25-7.25 7.25-7.25S18 6.75 18 10.75 14.75 18 10.75 18 3.5 14.75 3.5 10.75Z" />
               </svg>
             </button>
-            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/60 hover:text-white">
+            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/70 hover:text-white">
               <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6.75 3.5c-.69 0-1.25.56-1.25 1.25V16.8c.375-.192.8-.3 1.25-.3H18.5v-13H6.75ZM18.5 18H6.75a1.25 1.25 0 1 0 0 2.5H18.5V18ZM4 19.25V4.75A2.75 2.75 0 0 1 6.75 2H20v20H6.75A2.75 2.75 0 0 1 4 19.25Z" />
               </svg>
-              <span className="font-medium text-base ml-1.5 font-sans">Katalog</span>
+              <span className="font-bold text-sm ml-1.5 font-sans tracking-wide uppercase">Katalog</span>
             </button>
-            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/60 hover:text-white">
+            <button className="flex items-center justify-center h-8 py-1 px-2 gap-1 rounded-sm transition-all duration-200 cursor-pointer hover:bg-white/10 active:scale-95 text-white/70 hover:text-white">
               <svg className="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M6.77 21.7c.155.065.32.095.48.095l.005-.005c.32 0 .64-.125.88-.365L11.56 18h7.69A2.755 2.755 0 0 0 22 15.25v-9.5A2.755 2.755 0 0 0 19.25 3H4.75A2.755 2.755 0 0 0 2 5.75v9.5A2.755 2.755 0 0 0 4.75 18H6v2.545c0 .51.3.96.77 1.155ZM3.5 5.75c0-.69.56-1.25 1.25-1.25h14.5c.69 0 1.25.56 1.25 1.25v9.5c0 .69-.56 1.25-1.25 1.25h-8.31L7.5 19.94V16.5H4.75c-.69 0-1.25-.56-1.25-1.25v-9.5ZM17.5 8h-11v1.5h11V8Zm-4 3.5h-7V13h7v-1.5Z" />
               </svg>
-              <span className="font-medium text-base ml-1.5 font-sans">Forumlar</span>
+              <span className="font-bold text-sm ml-1.5 font-sans tracking-wide uppercase">Forumlar</span>
             </button>
             <button className="flex items-center justify-center h-8 py-1 px-4 gap-1.5 rounded-full font-bold text-xs tracking-widest uppercase transition-all duration-200 cursor-pointer border" style={{ color: themeColor, borderColor: `${themeColor}40`, backgroundColor: `${themeColor}12` }}>
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -490,7 +523,7 @@ export default function RadioPage() {
                 <path d="M12 22C6.485 22 2 17.515 2 12c0-5.02 3.755-9.28 8.735-9.91l1.11-.14-.29 1.08c-.2.75-.305 1.495-.305 2.225 0 4.685 3.815 8.5 8.5 8.5a8.78 8.78 0 0 0 1.075-.075l1.11-.14-.29 1.08A10.01 10.01 0 0 1 12 22.005V22ZM9.865 3.78C6.17 4.735 3.5 8.1 3.5 12c0 4.685 3.815 8.5 8.5 8.5 3.46 0 6.55-2.11 7.845-5.25h-.095c-5.515 0-10-4.485-10-10 0-.485.04-.975.115-1.47Z" />
               </svg>
             </button>
-            <button className="flex shrink-0 h-9 w-9 rounded-sm border border-white/10 bg-white/5 cursor-pointer transition-transform duration-200 active:scale-95 overflow-hidden">
+            <button className="flex shrink-0 h-9 w-9 rounded-sm border border-white/10 bg-white/5 transform-gpu cursor-pointer transition-transform duration-200 active:scale-95 overflow-hidden">
               <img className="object-cover w-full h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSlk0JfikQBJpYrg_nlYLZUcjDOcEaanRtykudQ9_X1slNjDwOINg9RYk&s=10" alt="Profile" />
             </button>
           </div>
@@ -505,13 +538,13 @@ export default function RadioPage() {
             <X size={28} />
           </button>
         </div>
-        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition">Asosiy</a>
-        <a href="#" className="text-2xl font-black uppercase tracking-widest transition animate-pulse" style={{ color: themeColor }}>Katalog</a>
-        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition">Forumlar</a>
-        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition">Radio</a>
+        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition font-sans">Asosiy</a>
+        <a href="#" className="text-2xl font-black uppercase tracking-widest transition font-sans" style={{ color: themeColor }}>Katalog</a>
+        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition font-sans">Forumlar</a>
+        <a href="#" className="text-2xl font-black uppercase tracking-widest text-white hover:text-[#8a60c2] transition font-sans">Radio</a>
       </div>
 
-      {/* 3. ГЛАВНАЯ СЦЕНА ШВЕЙЦАРСКОЙ ГАЛЕРЕИ (ФИКСИРОВАННАЯ ВЫСОТА НА ДЕСКТЕ) */}
+      {/* 3. ГЛАВНАЯ СЦЕНА (DOUBLED FROSTED ACRYLIC PANELS - LOCKED HEIGHT AT 580PX) */}
       <main className="flex-1 flex items-center justify-center py-6 md:py-8 z-10 px-4 md:px-6">
         <div className="w-full max-w-[1150px] grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch justify-center relative">
           
@@ -524,7 +557,7 @@ export default function RadioPage() {
               backgroundColor: themeColor
             }}
           >
-            <div className="absolute inset-0 z-0 flex items-center justify-center" style={{ backgroundColor: themeColor }}>
+            <div className="absolute inset-0 z-0 flex items-center justify-center bg-black/60" style={{ backgroundColor: themeColor }}>
               <div className={`relative h-full w-full ${transitionInfo.image.includes('ostchan') ? 'md:w-[50%] md:ml-20' : 'md:w-[100%]'}`}>
                 <Image
                   src={transitionInfo.image}
@@ -548,74 +581,102 @@ export default function RadioPage() {
             </div>
           </div>
 
-          {/* ================= ЛЕВАЯ КОЛОНКА: ШВЕЙЦАРСКАЯ ГАЛЕРЕЙНАЯ ОБЛОЖКА И ДЕК УПРАВЛЕНИЯ (5 COLS - h-[580px]) ================= */}
+          {/* ================= ЛЕВАЯ КОЛОНКА: DYNAMIC 3D DECK & FLUID JOG JAD (5 COLS - h-[580px]) ================= */}
           <div className="lg:col-span-5 flex flex-col gap-6 lg:h-[580px] justify-between">
             
-            {/* Карточка галерейной обложки (Gallery Frame) */}
-            <div className="hologram-panel rounded-[2rem] p-4 border border-white/5 flex-1 flex flex-col justify-between overflow-hidden relative group/cover cursor-pointer">
-              <div className="hologram-scanline" />
+            {/* Карточка 3D Обложки и визуализатора (Premium Glass Panel) */}
+            <div className="glass-panel glass-border-glow rounded-[2.5rem] p-5 flex-1 flex flex-col justify-between overflow-hidden relative group/cover select-none">
               
-              {/* Фоновое свечение за обложкой */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#8a60c2]/10 to-transparent opacity-50 z-0 pointer-events-none" />
-              
-              {/* Квадратная обложка */}
-              <div className="relative w-full aspect-square rounded-[1.5rem] overflow-hidden border border-white/10 z-10 shadow-2xl">
-                <Image
-                  src={selectedTrack?.coverArt || '/images/ado-elf.jpg'}
-                  alt="Track Album Art"
-                  fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover/cover:scale-105"
-                  priority
-                />
-                
-                {/* Оверлей Play/Pause в центре обложки */}
-                <div 
-                  onClick={togglePlayPause}
-                  className="absolute inset-0 bg-black/40 opacity-0 group-hover/cover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-20 cursor-pointer"
-                >
-                  <div className="w-14 h-14 bg-white/10 rounded-full border border-white/20 backdrop-blur-md flex items-center justify-center scale-90 group-hover/cover:scale-100 transition-transform duration-300 shadow-2xl active:scale-95">
-                    {isPlaying ? (
-                      <Pause className="w-6 h-6 text-white" fill="currentColor" />
-                    ) : (
-                      <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Название трека и автор */}
-              <div className="w-full flex justify-between items-end mt-4 px-2 z-10 flex-shrink-0">
-                <div className="overflow-hidden flex-1 mr-4 select-text">
-                  <h3 className="font-extrabold text-xl md:text-2xl tracking-tighter uppercase text-white truncate">
-                    {selectedTrack?.title}
-                  </h3>
-                  <span className="text-[10px] font-black tracking-[0.2em] uppercase mt-0.5 block" style={{ color: themeColor }}>
-                    {selectedTrack?.artist}
-                  </span>
-                </div>
-                
-                {/* Управление станцией (JPOP / OST) */}
+              {/* Верхняя панель со станцией */}
+              <div className="flex items-center justify-between z-10 flex-shrink-0 w-full mb-3 px-1.5">
+                <span className="text-[10px] font-black tracking-widest text-white/50 uppercase font-mono">KAWAII DECK LIVE</span>
                 <button 
                   onClick={toggleStation}
-                  className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.02] text-[10px] font-black tracking-widest uppercase hover:bg-white/5 active:scale-95 transition-all text-white/70 hover:text-white flex-shrink-0 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-[9px] font-black tracking-widest uppercase hover:bg-white/10 active:scale-95 transition-all text-white/60 hover:text-white flex-shrink-0 cursor-pointer"
                 >
                   {activeStation === 'default' ? 'J-POP' : 'OST'}
                 </button>
               </div>
 
+              {/* 3D Интерактивная Обложка в Perspective Container */}
+              <div className="perspective-container flex-1 flex items-center justify-center py-2 relative z-10">
+                <div 
+                  onMouseMove={handleCoverMouseMove}
+                  onMouseLeave={handleCoverMouseLeave}
+                  className="tilt-element relative w-[220px] h-[220px] xs:w-[260px] xs:h-[260px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/15 cursor-pointer bg-[#0e0c12]"
+                >
+                  <Image
+                    src={selectedTrack?.coverArt || '/images/ado-elf.jpg'}
+                    alt="Track Album Art"
+                    fill
+                    className="object-cover pointer-events-none"
+                    priority
+                  />
+                  
+                  {/* Реалистичный стеклянный блик */}
+                  <div 
+                    className="glass-gloss absolute inset-0 pointer-events-none transition-all duration-300 z-20"
+                    style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 50%)' }}
+                  />
+
+                  {/* Оверлей Play/Pause по центру при ховере */}
+                  <div 
+                    onClick={togglePlayPause}
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover/cover:opacity-100 transition-all duration-300 flex items-center justify-center z-30 cursor-pointer"
+                  >
+                    <div className="w-14 h-14 bg-white/10 rounded-full border border-white/20 backdrop-blur-md flex items-center justify-center scale-90 group-hover/cover:scale-100 transition-all duration-300 shadow-2xl active:scale-95">
+                      {isPlaying ? (
+                        <Pause className="w-6 h-6 text-white" fill="currentColor" />
+                      ) : (
+                        <Play className="w-6 h-6 text-white ml-1" fill="currentColor" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Высокоточный волновой визуализатор Frequencies (Glowing Waveform) */}
+              <div className="w-full h-8 flex items-end justify-center gap-[3px] px-4 my-2 z-10 flex-shrink-0">
+                {[...Array(19)].map((_, i) => {
+                  const animDelay = `${i * 0.1}s`;
+                  const heightVal = isPlaying ? `${Math.floor(Math.random() * 20) + 8}px` : '4px';
+                  return (
+                    <div 
+                      key={i} 
+                      className="w-[3px] rounded-full transition-all duration-300"
+                      style={{ 
+                        height: heightVal,
+                        backgroundColor: themeColor,
+                        boxShadow: `0 0 8px ${themeColor}aa`,
+                        animation: isPlaying ? `liquid-silk-1 1.2s infinite ease-in-out alternate` : 'none',
+                        animationDelay: animDelay
+                      }}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Текст трека (Title & Artist) */}
+              <div className="w-full text-center mt-2 px-2 z-10 flex-shrink-0">
+                <h3 className="font-extrabold text-xl md:text-2xl tracking-tighter uppercase text-white truncate max-w-full">
+                  {selectedTrack?.title}
+                </h3>
+                <span className="text-[10px] font-black tracking-[0.2em] uppercase mt-0.5 block" style={{ color: themeColor }}>
+                  {selectedTrack?.artist}
+                </span>
+              </div>
+
             </div>
 
-            {/* Карточка тактильного Volume-слайдера и телеметрии */}
-            <div className="hologram-panel rounded-[2rem] p-5 border border-white/5 flex flex-col gap-4 flex-shrink-0 relative">
-              <div className="hologram-scanline" />
+            {/* Стеклянная панель тактильного регулятора громкости (Frosted Volume Deck) */}
+            <div className="glass-panel glass-border-glow rounded-[2.5rem] p-5 flex flex-col gap-4 flex-shrink-0 relative">
               
-              {/* Заголовок слайдера */}
               <div className="flex items-center justify-between select-none">
-                <span className="text-[9px] font-black tracking-[0.18em] uppercase text-white/40 font-mono">master output control</span>
+                <span className="text-[9px] font-black tracking-[0.18em] uppercase text-white/40 font-mono">fluid level jog-dial</span>
                 <span className="text-[9px] font-black tracking-[0.18em] uppercase font-mono text-gray-500">{listenersCount} ONLINE</span>
               </div>
 
-              {/* Увеличенный комфортный Volume Pill */}
+              {/* Жидкий Volume Pill в стеклянной колбе */}
               <div 
                 onWheel={handleVolumeWheel}
                 className="bg-white/[0.02] border border-white/5 rounded-2xl px-4 h-12 flex items-center justify-between gap-4 cursor-pointer hover:border-white/10 transition-colors select-none"
@@ -669,11 +730,11 @@ export default function RadioPage() {
 
           </div>
 
-          {/* ================= ПРАВАЯ КОЛОНКА: СУБТИТРЫ И РЕДАКТОРСКАЯ СТАТЬЯ (7 COLS - h-[580px]) ================= */}
+          {/* ================= ПРАВАЯ КОЛОНКА: СУБТИТРЫ И ДЕТАЛИ В ПАНЕЛИ МАТОВОГО СТЕКЛА (7 COLS - h-[580px]) ================= */}
           <div className="lg:col-span-7 flex flex-col lg:h-[580px] justify-between">
             
-            <div className="hologram-panel rounded-[2rem] p-6 md:p-8 border border-white/5 h-full flex flex-col justify-between relative overflow-hidden">
-              <div className="hologram-scanline" />
+            <div className="glass-panel glass-border-glow rounded-[2.5rem] p-6 md:p-8 border border-white/5 h-full flex flex-col justify-between relative overflow-hidden">
+              <div className="glass-sheen-effect absolute inset-0 pointer-events-none rounded-inherit z-0 opacity-20" />
               
               {/* Очередь треков на фоне (Minimal queue elements) */}
               <div className="hidden lg:flex absolute top-1/2 -translate-y-1/2 left-full flex-col gap-2 z-[-1] pointer-events-none">
@@ -798,7 +859,7 @@ export default function RadioPage() {
           <div className="md:hidden w-full flex flex-col gap-3 mt-2 px-1">
             
             {/* Мобильные Вкладки: Очередь / Текст / Musiqa haqida */}
-            <div className="flex bg-[#0d0c10]/60 backdrop-blur-xl p-1.5 rounded-2xl border border-white/5 shadow-xl select-none">
+            <div className="flex bg-[#000000]/60 backdrop-blur-xl p-1.5 rounded-2xl border border-white/5 shadow-xl select-none">
               <button 
                 onClick={() => setMobileTab('queue')} 
                 className={`flex-1 py-3 rounded-xl text-[10px] font-bold tracking-widest uppercase transition-all duration-300 ${mobileTab === 'queue' ? 'bg-[#8a60c2] text-white shadow-md' : 'text-gray-400 hover:text-white'}`}
@@ -899,7 +960,7 @@ export default function RadioPage() {
       </main>
 
       {/* 4. НАСТОЯЩИЙ МОБИЛЬНЫЙ НАВИГАТОР СНИЗУ (ORIGINAL BottomBar) */}
-      <nav className="fixed bottom-0 left-0 right-0 h-16 px-5 w-full flex items-center justify-center bg-[#000000]/95 backdrop-blur-xl border-t border-white/5 select-none z-[999] lg:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 h-16 px-5 w-full flex items-center justify-center bg-[#000000]/90 backdrop-blur-2xl border-t border-white/10 select-none z-[999] lg:hidden">
         <div className="flex items-center justify-between w-full max-w-[400px]">
           <button className="flex flex-col items-center justify-center gap-1 p-1 text-gray-500 hover:text-white transition-all cursor-pointer active:scale-95">
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

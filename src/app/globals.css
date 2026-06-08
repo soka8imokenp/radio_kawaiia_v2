@@ -1,288 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&display=swap');
+@theme {
+  --font-cyber: 'Syncopate', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  
+  --color-bg-light: #f5f6f9;
+  --color-bg-dark: #111215;
+  --color-panel-dark: #17181c;
+  --color-accent: #c8a2ff;
+}
 
 :root {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Playfair Display', 'Georgia', serif;
-  --accent: #c8a2ff;
-  --accent-dim: #6e4a9e;
-  --surface: #0a0a0a;
-  --surface-elevated: #111111;
-  --surface-hover: #1a1a1a;
-  --text-primary: #f0f0f0;
-  --text-secondary: #6b6b6b;
-  --text-muted: #3a3a3a;
-  --border: #1e1e1e;
-  --border-hover: #2a2a2a;
-  color-scheme: dark;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
+  color-scheme: light dark;
 }
 
 body {
-  background: var(--surface);
-  color: var(--text-primary);
+  background-color: #e9ebf0;
   font-family: var(--font-sans);
-  min-height: 100vh;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* =========================================
-   Selection
-   ========================================= */
-::selection {
-  background: var(--accent);
-  color: #000;
+/* Виниловые дорожки (световые блики) */
+.vinyl-reflection {
+  background: radial-gradient(circle, #000 0%, #15161a 35%, #222328 45%, #15161a 55%, #33343a 65%, #111215 100%);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.4),
+    inset 0 0 12px rgba(255, 255, 255, 0.05);
 }
 
-/* =========================================
-   Scrollbar — ultra thin
-   ========================================= */
-::-webkit-scrollbar {
-  width: 3px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-dim);
+.vinyl-grooves {
+  background: repeating-radial-gradient(
+    circle,
+    transparent,
+    transparent 1px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 3px
+  );
 }
 
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--text-muted) transparent;
+/* Кастомный скролл по спецификации */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-
-/* =========================================
-   Film Grain Overlay
-   ========================================= */
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -10%); }
-  20% { transform: translate(-15%, 5%); }
-  30% { transform: translate(7%, -25%); }
-  40% { transform: translate(-5%, 25%); }
-  50% { transform: translate(-15%, 10%); }
-  60% { transform: translate(15%, 0%); }
-  70% { transform: translate(0%, 15%); }
-  80% { transform: translate(3%, 35%); }
-  90% { transform: translate(-10%, 10%); }
-}
-
-.film-grain::after {
-  content: '';
-  position: fixed;
-  inset: -200%;
-  width: 400%;
-  height: 400%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-  animation: grain 8s steps(10) infinite;
-  opacity: 0.4;
-}
-
-/* =========================================
-   Ambient Glow Pulse
-   ========================================= */
-@keyframes ambient-drift-1 {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
-  50% { transform: translate(60px, -40px) scale(1.15); opacity: 0.25; }
-  100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
-}
-
-@keyframes ambient-drift-2 {
-  0% { transform: translate(0, 0) scale(1.1); opacity: 0.1; }
-  50% { transform: translate(-80px, 50px) scale(0.9); opacity: 0.2; }
-  100% { transform: translate(0, 0) scale(1.1); opacity: 0.1; }
-}
-
-.ambient-orb-1 {
-  animation: ambient-drift-1 20s ease-in-out infinite;
-}
-
-.ambient-orb-2 {
-  animation: ambient-drift-2 25s ease-in-out infinite;
-}
-
-/* =========================================
-   Cover Art Reveal
-   ========================================= */
-@keyframes cover-reveal {
-  0% { clip-path: inset(100% 0 0 0); }
-  100% { clip-path: inset(0 0 0 0); }
-}
-
-.cover-reveal {
-  animation: cover-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* =========================================
-   Waveform Bars
-   ========================================= */
-@keyframes wave-bar {
-  0%, 100% { transform: scaleY(0.3); }
-  50% { transform: scaleY(1); }
-}
-
-/* =========================================
-   Station Transition
-   ========================================= */
-@keyframes station-wipe {
-  0% { clip-path: circle(0% at 50% 50%); }
-  100% { clip-path: circle(150% at 50% 50%); }
-}
-
-.station-wipe-in {
-  animation: station-wipe 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes station-wipe-out {
-  0% { clip-path: circle(150% at 50% 50%); }
-  100% { clip-path: circle(0% at 50% 50%); }
-}
-
-.station-wipe-out {
-  animation: station-wipe-out 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-/* =========================================
-   Fade-in Utilities
-   ========================================= */
-@keyframes fade-up {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-.fade-up {
-  animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  opacity: 0;
-}
-
-.fade-up-delay-1 { animation-delay: 0.1s; }
-.fade-up-delay-2 { animation-delay: 0.2s; }
-.fade-up-delay-3 { animation-delay: 0.3s; }
-.fade-up-delay-4 { animation-delay: 0.4s; }
-
-/* =========================================
-   Lyrics line active highlight
-   ========================================= */
-.lyric-line-active {
-  color: var(--text-primary) !important;
-  font-weight: 500;
-  transform: scale(1.02);
-}
-
-.lyric-line-inactive {
-  color: var(--text-muted);
-  transition: all 0.3s ease;
-}
-
-/* =========================================
-   Volume slider custom styling
-   ========================================= */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
-  width: 100%;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-  height: 2px;
-  background: var(--border);
-  border-radius: 1px;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 10px;
-  height: 10px;
-  background: var(--accent);
-  border-radius: 50%;
-  margin-top: -4px;
-  transition: transform 0.15s ease;
-}
-
-input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.4);
-}
-
-input[type="range"]::-moz-range-track {
-  height: 2px;
-  background: var(--border);
-  border-radius: 1px;
-}
-
-input[type="range"]::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  background: var(--accent);
-  border-radius: 50%;
-  border: none;
-}
-
-/* =========================================
-   Marquee for long track names
-   ========================================= */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.marquee-container {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.marquee-text {
-  display: inline-block;
-  animation: marquee 12s linear infinite;
-}
-
-/* =========================================
-   Responsive typography
-   ========================================= */
-.display-title {
-  font-family: var(--font-serif);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-}
-
-.label-mono {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-
-/* Loading bar for station transition */
-@keyframes loading-bar {
-  0% { width: 0%; }
-  100% { width: 100%; }
-}
-
-.animate-loading-bar {
-  animation: loading-bar 2.5s ease-in-out;
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

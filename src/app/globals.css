@@ -1,50 +1,119 @@
 @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-cyber: 'Syncopate', sans-serif;
   --font-sans: 'Plus Jakarta Sans', sans-serif;
   
-  --color-bg-light: #f5f6f9;
-  --color-bg-dark: #111215;
-  --color-panel-dark: #17181c;
-  --color-accent: #c8a2ff;
+  /* Map Tailwind v4 color tokens to non-conflicting CSS variables to avoid circular lookups */
+  --color-background: var(--background-color);
+  --color-foreground: var(--foreground-color);
+  --color-primary: var(--primary-color);
+  
+  --color-card-bg: var(--card-bg-color);
+  --color-page-bg: var(--page-bg-color);
+  --color-card-border: var(--card-border-color);
+  --color-text-main: var(--text-main-color);
+  --color-text-muted: var(--text-muted-color);
+  --color-border-sep: var(--border-sep-color);
 }
 
 :root {
-  color-scheme: light dark;
+  --background-color: #ffffff;
+  --foreground-color: #000000;
+  --primary-color: #8a60c2;
+  
+  --page-bg-color: #e9ebf0;
+  --card-bg-color: #ffffff;
+  --card-border-color: #ffffff;
+  --text-main-color: #2c3246;
+  --text-muted-color: #9cb1c9;
+  --border-sep-color: rgba(0, 0, 0, 0.04);
+  
+  color-scheme: light;
+}
+
+.dark {
+  --background-color: #121115;
+  --foreground-color: #ffffff;
+  --primary-color: #8a60c2;
+  
+  --page-bg-color: #000000;
+  --card-bg-color: #121115;
+  --card-border-color: #1e1d22;
+  --text-main-color: #e1e7f0;
+  --text-muted-color: #6d7f95;
+  --border-sep-color: rgba(255, 255, 255, 0.04);
+  
+  --grid-color: rgba(139, 96, 194, 0.05);
+  --grid-color-bright: rgba(139, 96, 194, 0.2);
+  
+  color-scheme: dark;
 }
 
 body {
-  background-color: #e9ebf0;
+  background-color: var(--page-bg-color);
+  color: var(--text-main-color);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Виниловые дорожки (световые блики) */
-.vinyl-reflection {
-  background: radial-gradient(circle, #000 0%, #15161a 35%, #222328 45%, #15161a 55%, #33343a 65%, #111215 100%);
-  box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.4),
-    inset 0 0 12px rgba(255, 255, 255, 0.05);
+.card-shadow {
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.08), 
+              0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
-.vinyl-grooves {
-  background: repeating-radial-gradient(
-    circle,
-    transparent,
-    transparent 1px,
-    rgba(255, 255, 255, 0.02) 2px,
-    rgba(255, 255, 255, 0.02) 3px
-  );
+.dark .card-shadow {
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 
+              0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* Кастомный скролл по спецификации */
+/* Custom scroll bar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Hide default scrollbar */
 .no-scrollbar::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.grid-bg {
+    background-color: var(--background-color);
+    background-image: 
+        linear-gradient(to right, rgba(139, 96, 194, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(139, 96, 194, 0.05) 1px, transparent 1px);
+    background-size: 160px 160px;
+    transition: background-color 0.3s ease;
+}
+
+.grid-bg-bright {
+    background-image: 
+        linear-gradient(to right, rgba(139, 96, 194, 0.2) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(139, 96, 194, 0.2) 1px, transparent 1px);
+    background-size: 160px 160px;
+}
+
+/* Smooth transition for theme toggles */
+.theme-transition {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }

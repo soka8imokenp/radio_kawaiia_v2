@@ -5,11 +5,14 @@ import { useAudioPlayer } from '@/contexts/AudioPlayerContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export const GlobalMiniPlayer = () => {
   const { currentTrack, isPlaying, togglePlayPause, volume, setVolume } = useAudioPlayer();
   const [isMinimized, setIsMinimized] = useState(false);
+  const pathname = usePathname();
 
+  if (pathname === '/') return null;
   if (!currentTrack) return null;
 
   const VolumeIcon = volume === 0 ? VolumeX : Volume2;

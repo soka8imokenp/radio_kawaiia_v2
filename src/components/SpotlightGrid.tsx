@@ -15,7 +15,7 @@ export default function SpotlightGrid() {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center -z-10 overflow-hidden pointer-events-none bg-[var(--color-background)] transition-colors duration-300">
+    <div className="fixed inset-0 flex items-center justify-center -z-10 overflow-hidden pointer-events-none bg-[var(--color-page-bg)] transition-colors duration-300">
       {/* ☀️/🌙 1. Umumiy orqa fon to'ri (.grid-bg klassi) */}
       <div className="absolute inset-0 grid-bg opacity-30" />
 

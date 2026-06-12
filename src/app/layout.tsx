@@ -3,6 +3,9 @@ import { Google_Sans_Flex, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { AudioPlayerProvider } from "@/contexts/AudioPlayerContext";
 import { GlobalMiniPlayer } from "@/components/GlobalMiniPlayer";
+import TopBar from "@/components/top-bar/top-bar";
+import FooterBar from "@/components/footer-bar/footer-bar";
+import SpotlightGrid from "@/components/SpotlightGrid";
 
 const googleSansFlex = Google_Sans_Flex({
   variable: "--font-google-sans-flex",
@@ -33,9 +36,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${googleSansFlex.variable} ${dmMono.variable} antialiased`} suppressHydrationWarning>
-      <body className="antialiased">
+      <body className="flex flex-col min-h-screen antialiased bg-transparent text-text-main theme-transition relative">
         <AudioPlayerProvider>
-          {children}
+          {/* Spotlight Grid Background */}
+          <SpotlightGrid />
+          
+          <TopBar />
+          <main className="flex-1 flex flex-col items-center justify-center w-full max-w-[960px] mx-auto py-8 px-4 md:px-6 relative z-10">
+            {children}
+          </main>
+          <FooterBar />
           <GlobalMiniPlayer />
         </AudioPlayerProvider>
       </body>
